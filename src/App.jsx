@@ -74,8 +74,31 @@ Pour chaque séance :
 ## Nutrition
 Calories, protéines, glucides, lipides, timing repas, suppléments
 
+IMPORTANT : Sois concis sur les échauffements (3-4 lignes max), regroupe les accessoires en un seul tableau par séance. Garde suffisamment de place pour la nutrition et la récupération.
+
+## Progression S1 à S${semaines}
+| Semaine | Squat Top Set | Bench Top Set | Deadlift Top Set | Intensité | Focus |
+
+## Nutrition
+### Macros quotidiennes
+| Macro | Quantité | Kcal |
+- TDEE estimé et calories cibles
+- Timing repas (avant/après entraînement)
+- Suppléments recommandés (créatine, whey, etc.)
+
 ## Récupération & Conseils
-Sommeil, mobilité, gestion fatigue, déload`;
+### Sommeil
+- Recommandations spécifiques powerlifting
+
+### Mobilité quotidienne
+- 3-4 exercices clés à faire tous les jours
+
+### Gestion fatigue & Déload
+- Protocole déload semaine ${semaines}
+- Signaux d'alerte à surveiller
+
+### Conseils spécifiques
+- 3-4 conseils clés pour progresser sur ce profil`;
 }
 
 export default function PowerliftingGenerator() {
