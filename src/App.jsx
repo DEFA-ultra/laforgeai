@@ -297,7 +297,24 @@ for (const line of lines) {
 if (inTable) flushTable();
 flushList();
 document.getElementById("content").innerHTML = html;
-setTimeout(function() { window.print(); }, 800);
+// Auto download as PDF
+setTimeout(function() {
+  var script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+  script.onload = function() {
+    var element = document.getElementById('content');
+    var opt = {
+      margin: [10, 15],
+      filename: 'programme_powerlifting.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+    html2pdf().set(opt).from(document.body).save();
+  };
+  document.head.appendChild(script);
+}, 500);
 <\/script>
 </body>
 </html>`;
