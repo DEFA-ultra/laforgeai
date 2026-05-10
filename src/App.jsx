@@ -182,7 +182,7 @@ export default function PowerliftingGenerator() {
     setExportingPDF(true);
     setTimeout(() => {
       try {
-        const printWindow = window.open("", "_blank", "width=900,height=700");
+        const printWindow = window.open("", "_blank", "width=900,height=700,scrollbars=yes");
         const total = (parseInt(form.squat)||0)+(parseInt(form.bench)||0)+(parseInt(form.deadlift)||0);
         const htmlContent = `<!DOCTYPE html>
 <html lang="fr">
@@ -227,7 +227,7 @@ export default function PowerliftingGenerator() {
 </style>
 </head>
 <body>
-<button class="no-print print-btn" onclick="window.print()">🖨️ Enregistrer en PDF</button>
+<button class="no-print print-btn" onclick="window.print()">📥 Télécharger PDF</button>
 <div class="header">
   <div><h1>LA FORGE AI</h1><p>Générateur Powerlifting — Programme personnalisé par IA</p></div>
   <div class="header-date">${new Date().toLocaleDateString("fr-FR", {day:"numeric",month:"long",year:"numeric"})}</div>
@@ -297,6 +297,7 @@ for (const line of lines) {
 if (inTable) flushTable();
 flushList();
 document.getElementById("content").innerHTML = html;
+setTimeout(function() { window.print(); }, 800);
 <\/script>
 </body>
 </html>`;
