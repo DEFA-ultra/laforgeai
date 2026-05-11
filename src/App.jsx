@@ -104,7 +104,7 @@ IMPORTANT : Sois concis sur les échauffements (3-4 lignes max), regroupe les ac
 export default function PowerliftingGenerator() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
-    name: "", age: "", gender: "Homme", weight: "",
+    name: "", age: "", gender: "Homme", weight: "", height: "", height: "",
     objectif_precis: "", objectif_custom: "",
     niveau: "", frequency: "4", semaines: "8", jours: [],
     squat: "", bench: "", deadlift: "",
@@ -297,24 +297,7 @@ for (const line of lines) {
 if (inTable) flushTable();
 flushList();
 document.getElementById("content").innerHTML = html;
-// Auto download as PDF
-setTimeout(function() {
-  var script = document.createElement('script');
-  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-  script.onload = function() {
-    var element = document.getElementById('content');
-    var opt = {
-      margin: [10, 15],
-      filename: 'programme_powerlifting.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    };
-    html2pdf().set(opt).from(document.body).save();
-  };
-  document.head.appendChild(script);
-}, 500);
+setTimeout(function() { window.print(); }, 800);
 <\/script>
 </body>
 </html>`;
@@ -448,7 +431,7 @@ setTimeout(function() {
               <h2 style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "1.4rem", color: C, marginTop: 0 }}>Profil & 1RM</h2>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.8rem", marginBottom: "1rem" }}>
-                {[["Prénom", "name", "text", "Alex"], ["Âge", "age", "number", "25"], ["Poids kg", "weight", "number", "90"]].map(([l, key, type, ph]) => (
+                {[["Prénom", "name", "text", "Alex"], ["Âge", "age", "number", "25"], ["Taille cm", "height", "number", "175"], ["Poids kg", "weight", "number", "90"]].map(([l, key, type, ph]) => (
                   <div key={key}><label style={lbl}>{l}</label><input style={inp} type={type} placeholder={ph} value={form[key]} onChange={e => update(key, e.target.value)} /></div>
                 ))}
                 <div><label style={lbl}>Genre</label><div style={{ display: "flex", gap: "0.5rem" }}>{["Homme", "Femme"].map(g => <button key={g} onClick={() => update("gender", g)} style={{ ...chip(form.gender === g), flex: 1 }}>{g}</button>)}</div></div>
