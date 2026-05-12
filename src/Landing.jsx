@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const C = "#06b6d4";
-const STRIPE_LINK = "https://buy.stripe.com/test_cNieVc7az7Pd8VB2Ls3Ru00";
+const STRIPE_LINK = "https://buy.stripe.com/00weVf5KYa77g87fyhe7m00";
 
 export default function Landing() {
   const [hovering, setHovering] = useState(false);
