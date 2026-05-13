@@ -185,57 +185,30 @@ export default function PowerliftingGenerator() {
       const total = (parseInt(finalForm.squat)||0)+(parseInt(finalForm.bench)||0)+(parseInt(finalForm.deadlift)||0);
 
       const container = document.createElement('div');
-      container.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9.5pt;color:#1a1a1a;background:#fff;padding:10mm 15mm;width:210mm;';
+      container.style.cssText = 'font-family:Arial,Helvetica,sans-serif;font-size:9.5pt;color:#1a1a1a;background:#fff;width:190mm;padding:0;margin:0;';
 
-      container.innerHTML = `
-        <div style="background:#07050f;padding:12px 18px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #06b6d4;">
-          <div>
-            <div style="font-size:20pt;font-weight:900;color:#06b6d4;letter-spacing:2px;font-family:Arial,sans-serif;">LA FORGE AI</div>
-            <div style="font-size:7.5pt;color:#7dd3e0;margin-top:2px;">Générateur Powerlifting — Programme personnalisé par IA</div>
-          </div>
-          <div style="color:#7dd3e0;font-size:7.5pt;">${new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})}</div>
-        </div>
-        <div style="background:#f0f9ff;border:1.5px solid #06b6d4;border-radius:5px;padding:8px 12px;margin-bottom:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:5px 10px;">
-          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Athlète</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.name||'—'}</div></div>
-          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Âge</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.age?finalForm.age+' ans':'—'}</div></div>
-          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Poids</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.weight?finalForm.weight+' kg':'—'}</div></div>
-          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Niveau</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.niveau||'—'}</div></div>
-          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Squat 1RM</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.squat?finalForm.squat+' kg':'—'}</div></div>
-          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Bench 1RM</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.bench?finalForm.bench+' kg':'—'}</div></div>
-          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Deadlift 1RM</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.deadlift?finalForm.deadlift+' kg':'—'}</div></div>
-          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Durée</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.semaines} semaines</div></div>
-          ${total > 0 ? `<div style="grid-column:span 4;background:#06b6d4;color:#fff;text-align:center;padding:4px;border-radius:3px;font-weight:700;font-size:9pt;margin-top:3px;">TOTAL : ${total} KG</div>` : ''}
-        </div>
-        ${finalForm.objectif_precis ? `<div style="background:#e0f7fa;border-left:3px solid #06b6d4;padding:5px 10px;margin-bottom:10px;font-size:8.5pt;"><strong style="color:#0284c7;">Objectif : </strong>${finalForm.objectif_precis}</div>` : ''}
-        <div id="pdf-content"></div>
-        <div style="margin-top:15px;padding-top:6px;border-top:2px solid #06b6d4;display:flex;justify-content:space-between;color:#64748b;font-size:7pt;">
-          <span>La Forge AI — Programme Powerlifting généré par IA</span>
-          <span>${finalForm.name||'Athlète'} | ${new Date().toLocaleDateString('fr-FR')}</span>
-        </div>
-      `;
-
-      const contentDiv = container.querySelector('#pdf-content');
       const lines = program.split('\n');
-      let html = '';
+      let bodyHtml = '';
       let inTable = false;
       let tableRows = [];
 
       function flushTable() {
         if (!tableRows.length) return;
-        let t = '<table style="width:100%;border-collapse:collapse;margin:3px 0 6px 0;font-size:8pt;">';
+        let t = '<table style="width:100%;border-collapse:collapse;margin:4px 0 8px 0;font-size:8.5pt;">';
         tableRows.forEach((row, ri) => {
-          const bg = ri === 0 ? '#06b6d4' : ri%2===0 ? '#f0f9ff' : '#fff';
-          const color = ri === 0 ? '#fff' : '#1e293b';
+          const bg = ri === 0 ? '#334155' : ri%2===0 ? '#f8fafc' : '#ffffff';
+          const color = ri === 0 ? '#ffffff' : '#1e293b';
           const fw = ri === 0 ? '700' : '400';
-          t += `<tr style="background:${bg};">`;
+          t += '<tr style="background:' + bg + ';">';
           row.forEach(cell => {
             const tag = ri === 0 ? 'th' : 'td';
-            t += `<${tag} style="padding:3.5px 5px;border-bottom:1px solid #e2e8f0;color:${color};font-weight:${fw};font-size:7.5pt;text-align:left;">${cell.trim().replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</${tag}>`;
+            const align = ri === 0 ? 'left' : 'left';
+            t += '<' + tag + ' style="padding:4px 7px;border-bottom:1px solid #e2e8f0;color:' + color + ';font-weight:' + fw + ';font-size:8pt;text-align:' + align + ';">' + cell.trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') + '</' + tag + '>';
           });
           t += '</tr>';
         });
         t += '</table>';
-        html += t;
+        bodyHtml += t;
         tableRows = [];
         inTable = false;
       }
@@ -247,26 +220,72 @@ export default function PowerliftingGenerator() {
           continue;
         }
         if (inTable) flushTable();
-        if (!line.trim()) { html += '<div style="height:4px;"></div>'; continue; }
-        if (line.startsWith('# ')) { html += `<div style="background:#06b6d4;color:#fff;padding:5px 10px;font-size:11pt;font-weight:800;text-transform:uppercase;margin:12px 0 5px 0;">${line.slice(2)}</div>`; continue; }
-        if (line.startsWith('## ')) { html += `<div style="background:#e0f7fa;border-left:4px solid #06b6d4;color:#0369a1;padding:4px 8px;font-size:9.5pt;font-weight:700;margin:8px 0 4px 0;">${line.slice(3)}</div>`; continue; }
-        if (line.startsWith('### ')) { html += `<div style="color:#0284c7;font-size:8.5pt;font-weight:700;margin:6px 0 3px 0;padding-bottom:2px;border-bottom:1px solid #bae6fd;">${line.slice(4)}</div>`; continue; }
-        if (line.startsWith('- ') || line.startsWith('* ')) { html += `<div style="display:flex;gap:6px;margin-bottom:2px;"><span style="color:#06b6d4;font-weight:700;">•</span><span style="font-size:8.5pt;color:#334155;">${line.slice(2).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</span></div>`; continue; }
-        const formatted = line.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-        html += `<p style="font-size:8.5pt;color:#334155;line-height:1.6;margin:2px 0;">${formatted}</p>`;
+        if (!line.trim()) { bodyHtml += '<div style="height:5px;"></div>'; continue; }
+        if (line.startsWith('# ')) {
+          bodyHtml += '<div style="background:#1e293b;color:#ffffff;padding:7px 14px;font-size:11.5pt;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin:14px 0 5px 0;">' + line.slice(2) + '</div>';
+          continue;
+        }
+        if (line.startsWith('## ')) {
+          bodyHtml += '<div style="background:#f1f5f9;border-left:3px solid #06b6d4;color:#1e293b;padding:5px 10px;font-size:10pt;font-weight:700;margin:10px 0 5px 0;">' + line.slice(3) + '</div>';
+          continue;
+        }
+        if (line.startsWith('### ')) {
+          bodyHtml += '<div style="color:#1e293b;font-size:9pt;font-weight:700;margin:7px 0 3px 0;padding-bottom:3px;border-bottom:1px solid #e2e8f0;">' + line.slice(4) + '</div>';
+          continue;
+        }
+        if (line.startsWith('- ') || line.startsWith('* ')) {
+          bodyHtml += '<div style="display:flex;gap:7px;margin-bottom:2px;"><span style="color:#06b6d4;font-weight:700;flex-shrink:0;">•</span><span style="font-size:8.5pt;color:#334155;line-height:1.6;">' + line.slice(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') + '</span></div>';
+          continue;
+        }
+        const formatted = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        bodyHtml += '<p style="font-size:8.5pt;color:#334155;line-height:1.6;margin:2px 0;">' + formatted + '</p>';
       }
       if (inTable) flushTable();
-      contentDiv.innerHTML = html;
+
+      container.innerHTML = \`
+        <div style="background:#07050f;padding:14px 20px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #06b6d4;margin-bottom:0;">
+          <div>
+            <div style="font-size:20pt;font-weight:900;color:#06b6d4;letter-spacing:2px;">LA FORGE AI</div>
+            <div style="font-size:8pt;color:#7dd3e0;margin-top:2px;">Générateur Powerlifting — Programme personnalisé par IA</div>
+          </div>
+          <div style="color:#7dd3e0;font-size:8pt;">\${new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})}</div>
+        </div>
+
+        <div style="padding:14px 20px;background:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px 14px;margin-bottom:10px;">
+            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Athlète</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.name||'—'}</div></div>
+            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Âge</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.age?finalForm.age+' ans':'—'}</div></div>
+            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Poids</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.weight?finalForm.weight+' kg':'—'}</div></div>
+            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Niveau</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.niveau||'—'}</div></div>
+            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Squat 1RM</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.squat?finalForm.squat+' kg':'—'}</div></div>
+            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Bench 1RM</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.bench?finalForm.bench+' kg':'—'}</div></div>
+            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Deadlift 1RM</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.deadlift?finalForm.deadlift+' kg':'—'}</div></div>
+            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Durée</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.semaines} semaines</div></div>
+          </div>
+          \${total > 0 ? '<div style="background:#06b6d4;color:#fff;text-align:center;padding:6px;border-radius:4px;font-weight:700;font-size:10pt;letter-spacing:1px;">TOTAL : ' + total + ' KG</div>' : ''}
+        </div>
+
+        \${finalForm.objectif_precis ? '<div style="margin:10px 20px 0;padding:7px 12px;background:#f1f5f9;border-left:4px solid #06b6d4;border-radius:0 4px 4px 0;font-size:9pt;color:#0f172a;"><strong style="color:#0284c7;">Objectif : </strong>' + finalForm.objectif_precis + '</div>' : ''}
+
+        <div style="padding:0 20px 14px 20px;">
+          \${bodyHtml}
+        </div>
+
+        <div style="border-top:2px solid #06b6d4;padding:8px 20px;display:flex;justify-content:space-between;background:#f8fafc;">
+          <span style="font-size:7.5pt;color:#64748b;">La Forge AI — Programme Powerlifting généré par IA</span>
+          <span style="font-size:7.5pt;color:#64748b;">\${finalForm.name||'Athlète'} | \${new Date().toLocaleDateString('fr-FR')}</span>
+        </div>
+      \`;
 
       document.body.appendChild(container);
 
       const opt = {
-        margin: 0,
-        filename: `programme_powerlifting_${(finalForm.name||'athlete').toLowerCase().replace(/\s+/g,'_')}.pdf`,
-        image: { type: 'jpeg', quality: 0.95 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        margin: [8, 8, 8, 8],
+        filename: 'programme_powerlifting_' + (finalForm.name||'athlete').toLowerCase().replace(/\s+/g,'_') + '.pdf',
+        image: { type: 'jpeg', quality: 0.97 },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true, windowWidth: 794 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'] }
+        pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', 'div'] }
       };
 
       await html2pdf().set(opt).from(container).save();
