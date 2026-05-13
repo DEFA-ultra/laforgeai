@@ -174,140 +174,107 @@ export default function PowerliftingGenerator() {
     setLoading(false);
   };
 
-  const exportPDF = () => {
+  const exportPDF = async () => {
     const finalForm = {
       ...form,
       objectif_precis: form.objectif_precis === "Objectif personnalisé..." ? form.objectif_custom : form.objectif_precis
     };
     setExportingPDF(true);
-    setTimeout(() => {
-      try {
-        const printWindow = window.open("", "_blank", "width=900,height=700,scrollbars=yes");
-        const total = (parseInt(form.squat)||0)+(parseInt(form.bench)||0)+(parseInt(form.deadlift)||0);
-        const htmlContent = `<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Programme Powerlifting - ${finalForm.name || "Athlète"}</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 9.5pt; color: #1a1a1a; background: #fff; padding: 12mm 15mm; }
-  @media print {
-    body { padding: 8mm 10mm; font-size: 9pt; }
-    .no-print { display: none !important; }
-    h1.section { page-break-after: avoid; }
-    h2.section { page-break-after: avoid; }
-    table { page-break-inside: avoid; }
-    tr { page-break-inside: avoid; }
-  }
-  .print-btn { position: fixed; top: 12px; right: 12px; background: #06b6d4; color: #fff; border: none; padding: 10px 22px; border-radius: 6px; font-size: 11pt; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(6,182,212,0.4); z-index: 9999; }
-  .header { background: #07050f; padding: 14px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #06b6d4; }
-  .header h1 { font-size: 20pt; font-weight: 900; color: #06b6d4; letter-spacing: 2px; }
-  .header p { font-size: 7.5pt; color: #7dd3e0; margin-top: 2px; }
-  .header-date { color: #7dd3e0; font-size: 7.5pt; text-align: right; }
-  .profil { background: #f0f9ff; border: 1.5px solid #06b6d4; border-radius: 5px; padding: 8px 12px; margin-bottom: 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px 10px; }
-  .profil-item label { font-size: 6.5pt; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; display: block; }
-  .profil-item span { font-size: 8.5pt; font-weight: 700; color: #0f172a; }
-  .total-badge { grid-column: span 4; background: #06b6d4; color: #fff; text-align: center; padding: 4px; border-radius: 3px; font-weight: 700; font-size: 9pt; letter-spacing: 1px; margin-top: 3px; }
-  .objectif { background: #e0f7fa; border-left: 3px solid #06b6d4; padding: 5px 10px; margin-bottom: 10px; font-size: 8.5pt; }
-  .objectif strong { color: #0284c7; }
-  h1.section { background: #06b6d4; color: #fff; padding: 5px 10px; font-size: 11pt; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 12px 0 5px 0; }
-  h2.section { background: #e0f7fa; border-left: 4px solid #06b6d4; color: #0369a1; padding: 4px 8px; font-size: 9.5pt; font-weight: 700; margin: 8px 0 4px 0; }
-  h3.section { color: #0284c7; font-size: 8.5pt; font-weight: 700; margin: 6px 0 3px 0; padding-bottom: 2px; border-bottom: 1px solid #bae6fd; }
-  table { width: 100%; border-collapse: collapse; margin: 3px 0 6px 0; font-size: 8pt; }
-  th { background: #06b6d4; color: #fff; padding: 3.5px 5px; text-align: left; font-weight: 700; font-size: 7.5pt; }
-  tr:nth-child(even) td { background: #f0f9ff; }
-  td { padding: 3px 5px; border-bottom: 1px solid #e2e8f0; color: #1e293b; vertical-align: top; }
-  ul { padding-left: 12px; margin: 2px 0 5px 0; }
-  li { font-size: 8.5pt; color: #334155; margin-bottom: 1.5px; line-height: 1.5; }
-  p { font-size: 8.5pt; color: #334155; line-height: 1.6; margin-bottom: 3px; }
-  .sep { border: none; border-top: 1px solid #e0f7fa; margin: 6px 0; }
-  strong { font-weight: 700; color: #0f172a; }
-  .footer { margin-top: 15px; padding-top: 6px; border-top: 2px solid #06b6d4; display: flex; justify-content: space-between; color: #64748b; font-size: 7pt; }
-</style>
-</head>
-<body>
-<button class="no-print print-btn" onclick="window.print()">📥 Télécharger PDF</button>
-<div class="header">
-  <div><h1>LA FORGE AI</h1><p>Générateur Powerlifting — Programme personnalisé par IA</p></div>
-  <div class="header-date">${new Date().toLocaleDateString("fr-FR", {day:"numeric",month:"long",year:"numeric"})}</div>
-</div>
-<div class="profil">
-  <div class="profil-item"><label>Athlète</label><span>${finalForm.name || "—"}</span></div>
-  <div class="profil-item"><label>Âge</label><span>${finalForm.age ? finalForm.age+" ans" : "—"}</span></div>
-  <div class="profil-item"><label>Poids</label><span>${finalForm.weight ? finalForm.weight+" kg" : "—"}</span></div>
-  <div class="profil-item"><label>Niveau</label><span>${finalForm.niveau || "—"}</span></div>
-  <div class="profil-item"><label>Squat 1RM</label><span>${finalForm.squat ? finalForm.squat+" kg" : "—"}</span></div>
-  <div class="profil-item"><label>Bench 1RM</label><span>${finalForm.bench ? finalForm.bench+" kg" : "—"}</span></div>
-  <div class="profil-item"><label>Deadlift 1RM</label><span>${finalForm.deadlift ? finalForm.deadlift+" kg" : "—"}</span></div>
-  <div class="profil-item"><label>Durée</label><span>${finalForm.semaines} semaines</span></div>
-  ${total > 0 ? `<div class="total-badge">TOTAL : ${total} KG</div>` : ""}
-</div>
-${finalForm.objectif_precis ? `<div class="objectif"><strong>🎯 Objectif : </strong>${finalForm.objectif_precis}</div>` : ""}
-<div id="content"></div>
-<div class="footer">
-  <span>La Forge AI — Programme Powerlifting généré par IA</span>
-  <span>${finalForm.name || "Athlète"} | ${new Date().toLocaleDateString("fr-FR")}</span>
-</div>
-<script>
-const prog = ${JSON.stringify(program)};
-const lines = prog.split("\\n");
-let html = "";
-let inTable = false;
-let tableRows = [];
-let inList = false;
+    try {
+      const html2pdf = (await import('html2pdf.js')).default;
+      const total = (parseInt(finalForm.squat)||0)+(parseInt(finalForm.bench)||0)+(parseInt(finalForm.deadlift)||0);
 
-function flushTable() {
-  if (!tableRows.length) return;
-  html += "<table>";
-  tableRows.forEach((row, ri) => {
-    const tag = ri === 0 ? "th" : "td";
-    html += "<tr>" + row.map(c => "<" + tag + ">" + c.trim().replace(/\\*\\*(.*?)\\*\\*/g, "<strong>$1</strong>") + "</" + tag + ">").join("") + "</tr>";
-  });
-  html += "</table>";
-  tableRows = [];
-  inTable = false;
-}
+      const container = document.createElement('div');
+      container.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9.5pt;color:#1a1a1a;background:#fff;padding:10mm 15mm;width:210mm;';
 
-function flushList() {
-  if (inList) { html += "</ul>"; inList = false; }
-}
+      container.innerHTML = `
+        <div style="background:#07050f;padding:12px 18px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #06b6d4;">
+          <div>
+            <div style="font-size:20pt;font-weight:900;color:#06b6d4;letter-spacing:2px;font-family:Arial,sans-serif;">LA FORGE AI</div>
+            <div style="font-size:7.5pt;color:#7dd3e0;margin-top:2px;">Générateur Powerlifting — Programme personnalisé par IA</div>
+          </div>
+          <div style="color:#7dd3e0;font-size:7.5pt;">${new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})}</div>
+        </div>
+        <div style="background:#f0f9ff;border:1.5px solid #06b6d4;border-radius:5px;padding:8px 12px;margin-bottom:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:5px 10px;">
+          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Athlète</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.name||'—'}</div></div>
+          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Âge</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.age?finalForm.age+' ans':'—'}</div></div>
+          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Poids</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.weight?finalForm.weight+' kg':'—'}</div></div>
+          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Niveau</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.niveau||'—'}</div></div>
+          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Squat 1RM</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.squat?finalForm.squat+' kg':'—'}</div></div>
+          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Bench 1RM</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.bench?finalForm.bench+' kg':'—'}</div></div>
+          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Deadlift 1RM</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.deadlift?finalForm.deadlift+' kg':'—'}</div></div>
+          <div><div style="font-size:6.5pt;color:#64748b;text-transform:uppercase;">Durée</div><div style="font-size:8.5pt;font-weight:700;">${finalForm.semaines} semaines</div></div>
+          ${total > 0 ? `<div style="grid-column:span 4;background:#06b6d4;color:#fff;text-align:center;padding:4px;border-radius:3px;font-weight:700;font-size:9pt;margin-top:3px;">TOTAL : ${total} KG</div>` : ''}
+        </div>
+        ${finalForm.objectif_precis ? `<div style="background:#e0f7fa;border-left:3px solid #06b6d4;padding:5px 10px;margin-bottom:10px;font-size:8.5pt;"><strong style="color:#0284c7;">Objectif : </strong>${finalForm.objectif_precis}</div>` : ''}
+        <div id="pdf-content"></div>
+        <div style="margin-top:15px;padding-top:6px;border-top:2px solid #06b6d4;display:flex;justify-content:space-between;color:#64748b;font-size:7pt;">
+          <span>La Forge AI — Programme Powerlifting généré par IA</span>
+          <span>${finalForm.name||'Athlète'} | ${new Date().toLocaleDateString('fr-FR')}</span>
+        </div>
+      `;
 
-for (const line of lines) {
-  if (line.startsWith("|")) {
-    flushList();
-    const cells = line.split("|").filter((_, i, a) => i > 0 && i < a.length - 1);
-    if (!cells.every(c => c.trim().match(/^[-:]+$/))) { tableRows.push(cells); inTable = true; }
-    continue;
-  }
-  if (inTable) flushTable();
-  if (!line.trim()) { flushList(); html += "<hr class='sep'>"; continue; }
-  if (line.startsWith("# ")) { flushList(); html += "<h1 class='section'>" + line.slice(2) + "</h1>"; continue; }
-  if (line.startsWith("## ")) { flushList(); html += "<h2 class='section'>" + line.slice(3) + "</h2>"; continue; }
-  if (line.startsWith("### ")) { flushList(); html += "<h3 class='section'>" + line.slice(4) + "</h3>"; continue; }
-  if (line.startsWith("- ") || line.startsWith("* ")) {
-    if (!inList) { html += "<ul>"; inList = true; }
-    html += "<li>" + line.slice(2).replace(/\\*\\*(.*?)\\*\\*/g, "<strong>$1</strong>") + "</li>";
-    continue;
-  }
-  flushList();
-  const formatted = line.replace(/\\*\\*(.*?)\\*\\*/g, "<strong>$1</strong>");
-  html += "<p>" + formatted + "</p>";
-}
-if (inTable) flushTable();
-flushList();
-document.getElementById("content").innerHTML = html;
-setTimeout(function() { window.print(); }, 800);
-<\/script>
-</body>
-</html>`;
-        printWindow.document.write(htmlContent);
-        printWindow.document.close();
-      } catch(e) {
-        alert("Erreur : " + e.message);
+      const contentDiv = container.querySelector('#pdf-content');
+      const lines = program.split('\n');
+      let html = '';
+      let inTable = false;
+      let tableRows = [];
+
+      function flushTable() {
+        if (!tableRows.length) return;
+        let t = '<table style="width:100%;border-collapse:collapse;margin:3px 0 6px 0;font-size:8pt;">';
+        tableRows.forEach((row, ri) => {
+          const bg = ri === 0 ? '#06b6d4' : ri%2===0 ? '#f0f9ff' : '#fff';
+          const color = ri === 0 ? '#fff' : '#1e293b';
+          const fw = ri === 0 ? '700' : '400';
+          t += `<tr style="background:${bg};">`;
+          row.forEach(cell => {
+            const tag = ri === 0 ? 'th' : 'td';
+            t += `<${tag} style="padding:3.5px 5px;border-bottom:1px solid #e2e8f0;color:${color};font-weight:${fw};font-size:7.5pt;text-align:left;">${cell.trim().replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</${tag}>`;
+          });
+          t += '</tr>';
+        });
+        t += '</table>';
+        html += t;
+        tableRows = [];
+        inTable = false;
       }
-      setExportingPDF(false);
-    }, 100);
+
+      for (const line of lines) {
+        if (line.startsWith('|')) {
+          const cells = line.split('|').filter((_,i,a) => i>0 && i<a.length-1);
+          if (!cells.every(c => c.trim().match(/^[-:]+$/))) { tableRows.push(cells); inTable = true; }
+          continue;
+        }
+        if (inTable) flushTable();
+        if (!line.trim()) { html += '<div style="height:4px;"></div>'; continue; }
+        if (line.startsWith('# ')) { html += `<div style="background:#06b6d4;color:#fff;padding:5px 10px;font-size:11pt;font-weight:800;text-transform:uppercase;margin:12px 0 5px 0;">${line.slice(2)}</div>`; continue; }
+        if (line.startsWith('## ')) { html += `<div style="background:#e0f7fa;border-left:4px solid #06b6d4;color:#0369a1;padding:4px 8px;font-size:9.5pt;font-weight:700;margin:8px 0 4px 0;">${line.slice(3)}</div>`; continue; }
+        if (line.startsWith('### ')) { html += `<div style="color:#0284c7;font-size:8.5pt;font-weight:700;margin:6px 0 3px 0;padding-bottom:2px;border-bottom:1px solid #bae6fd;">${line.slice(4)}</div>`; continue; }
+        if (line.startsWith('- ') || line.startsWith('* ')) { html += `<div style="display:flex;gap:6px;margin-bottom:2px;"><span style="color:#06b6d4;font-weight:700;">•</span><span style="font-size:8.5pt;color:#334155;">${line.slice(2).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</span></div>`; continue; }
+        const formatted = line.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+        html += `<p style="font-size:8.5pt;color:#334155;line-height:1.6;margin:2px 0;">${formatted}</p>`;
+      }
+      if (inTable) flushTable();
+      contentDiv.innerHTML = html;
+
+      document.body.appendChild(container);
+
+      const opt = {
+        margin: 0,
+        filename: `programme_powerlifting_${(finalForm.name||'athlete').toLowerCase().replace(/\s+/g,'_')}.pdf`,
+        image: { type: 'jpeg', quality: 0.95 },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'] }
+      };
+
+      await html2pdf().set(opt).from(container).save();
+      document.body.removeChild(container);
+    } catch(e) {
+      alert('Erreur PDF : ' + e.message);
+    }
+    setExportingPDF(false);
   };
 
   const reset = () => { setStep(1); setProgram(""); setProgress(0); };
