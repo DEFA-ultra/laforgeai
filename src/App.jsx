@@ -26,85 +26,23 @@ const OBJECTIFS_PRECIS = [
 function buildPrompt(form) {
   const poids = parseFloat(form.weight || 80);
   const semaines = form.semaines || "8";
-  const joursChoisis = form.jours?.length ? `Jours souhaités : ${form.jours.join(", ")}` : "";
-  const forceFreq = `\nFRÉQUENCE PAR MOUVEMENT :\n- Squat : ${form.squat_freq || "2"}x/semaine\n- Bench Press : ${form.bench_freq || "3"}x/semaine\n- Deadlift : ${form.deadlift_freq || "1"}x/semaine`;
+  const joursChoisis = form.jours && form.jours.length ? "Jours souhaités : " + form.jours.join(", ") : "";
+  const forceFreq = "\nFRÉQUENCE PAR MOUVEMENT :\n- Squat : " + (form.squat_freq || "2") + "x/semaine\n- Bench Press : " + (form.bench_freq || "3") + "x/semaine\n- Deadlift : " + (form.deadlift_freq || "1") + "x/semaine";
   const prefs = [];
-  if (form.squat_variants?.length) prefs.push(`Squat préféré : ${form.squat_variants.join(", ")}`);
-  if (form.bench_variants?.length) prefs.push(`Bench préféré : ${form.bench_variants.join(", ")}`);
-  if (form.deadlift_variants?.length) prefs.push(`Deadlift préféré : ${form.deadlift_variants.join(", ")}`);
-  if (form.upper_acc?.length) prefs.push(`Accessoires haut : ${form.upper_acc.join(", ")}`);
-  if (form.lower_acc?.length) prefs.push(`Accessoires bas : ${form.lower_acc.join(", ")}`);
-  const exoPrefs = prefs.length ? `\nEXERCICES PRÉFÉRÉS :\n${prefs.join("\n")}` : "";
+  if (form.squat_variants && form.squat_variants.length) prefs.push("Squat préféré : " + form.squat_variants.join(", "));
+  if (form.bench_variants && form.bench_variants.length) prefs.push("Bench préféré : " + form.bench_variants.join(", "));
+  if (form.deadlift_variants && form.deadlift_variants.length) prefs.push("Deadlift préféré : " + form.deadlift_variants.join(", "));
+  if (form.upper_acc && form.upper_acc.length) prefs.push("Accessoires haut : " + form.upper_acc.join(", "));
+  if (form.lower_acc && form.lower_acc.length) prefs.push("Accessoires bas : " + form.lower_acc.join(", "));
+  const exoPrefs = prefs.length ? "\nEXERCICES PRÉFÉRÉS :\n" + prefs.join("\n") : "";
 
-  return `Tu es un coach expert en Powerlifting. Génère un programme COMPLET, DÉTAILLÉ sur ${semaines} semaines.
-
-PROFIL :
-- Nom : ${form.name || "Athlète"} | Âge : ${form.age || "—"} ans | Poids : ${poids} kg | Genre : ${form.gender || "Homme"}
-- Niveau : ${form.niveau} | ${form.frequency}x/semaine
-- 1RM : Squat ${form.squat || "—"} kg | Bench ${form.bench || "—"} kg | Deadlift ${form.deadlift || "—"} kg | Total : ${(parseInt(form.squat)||0)+(parseInt(form.bench)||0)+(parseInt(form.deadlift)||0)} kg
-- Blessures : ${form.injuries || "Aucune"}
-- OBJECTIF PRÉCIS : ${form.objectif_precis || "Progression générale"}
-${joursChoisis}
-${forceFreq}
-${exoPrefs}
-
-RÈGLES OBLIGATOIRES :
-1. TOP SET (75-95% 1RM, RPE 8-9) + BACK-OFF (-10%, RPE 6-8) sur chaque mouvement principal
-2. Charges en kg précises calculées depuis les 1RM
-3. RPE et temps de repos indiqués pour chaque exercice
-4. Progression semaine par semaine avec charges exactes
-
-STRUCTURE COMPLÈTE :
-
-# Vue d'ensemble
-Durée, philosophie, objectif visé, progression attendue
-
-## Planning hebdomadaire
-| Jour | Séance | Focus | Durée |
-
-## Détail de CHAQUE séance (${form.frequency} séances)
-Pour chaque séance :
-### Échauffement spécifique (détaillé)
-| Exercice | Séries x Reps | Charge (kg) | % 1RM | RPE | Repos | Notes |
-### Récupération post-séance
-
-## Progression S1 à S${semaines}
-| Semaine | Squat Top Set | Bench Top Set | Deadlift Top Set | Volume total | Notes |
-
-## Nutrition
-Calories, protéines, glucides, lipides, timing repas, suppléments
-
-IMPORTANT : Sois concis sur les échauffements (3-4 lignes max), regroupe les accessoires en un seul tableau par séance. Garde suffisamment de place pour la nutrition et la récupération.
-
-## Progression S1 à S${semaines}
-| Semaine | Squat Top Set | Bench Top Set | Deadlift Top Set | Intensité | Focus |
-
-## Nutrition
-### Macros quotidiennes
-| Macro | Quantité | Kcal |
-- TDEE estimé et calories cibles
-- Timing repas (avant/après entraînement)
-- Suppléments recommandés (créatine, whey, etc.)
-
-## Récupération & Conseils
-### Sommeil
-- Recommandations spécifiques powerlifting
-
-### Mobilité quotidienne
-- 3-4 exercices clés à faire tous les jours
-
-### Gestion fatigue & Déload
-- Protocole déload semaine ${semaines}
-- Signaux d'alerte à surveiller
-
-### Conseils spécifiques
-- 3-4 conseils clés pour progresser sur ce profil`;
+  return "Tu es un coach expert en Powerlifting. Génère un programme COMPLET sur " + semaines + " semaines.\n\nPROFIL :\n- Nom : " + (form.name || "Athlète") + " | Âge : " + (form.age || "—") + " ans | Taille : " + (form.height || "—") + " cm | Poids : " + poids + " kg | Genre : " + (form.gender || "Homme") + "\n- Niveau : " + form.niveau + " | " + form.frequency + "x/semaine\n- 1RM : Squat " + (form.squat || "—") + " kg | Bench " + (form.bench || "—") + " kg | Deadlift " + (form.deadlift || "—") + " kg | Total : " + ((parseInt(form.squat)||0)+(parseInt(form.bench)||0)+(parseInt(form.deadlift)||0)) + " kg\n- Blessures : " + (form.injuries || "Aucune") + "\n- OBJECTIF PRÉCIS : " + (form.objectif_precis || "Progression générale") + "\n" + joursChoisis + "\n" + forceFreq + "\n" + exoPrefs + "\n\nRÈGLES OBLIGATOIRES :\n1. TOP SET (75-95% 1RM, RPE 8-9) + BACK-OFF (-10%, RPE 6-8) sur chaque mouvement principal\n2. Charges en kg précises calculées depuis les 1RM\n3. RPE et temps de repos indiqués pour chaque exercice\n4. Progression semaine par semaine avec charges exactes\n\nSTRUCTURE (concise mais complète) :\n\n# Vue d ensemble\n3-4 lignes : durée, split, objectif visé, progression attendue\n\n## Planning hebdomadaire\n| Jour | Séance | Focus | Durée |\n\n## Détail de chaque séance (" + form.frequency + " séances)\nPour chaque séance, échauffement en 3-4 points puis :\n| Exercice | Séries x Reps | Charge (kg) | % 1RM | RPE | Repos | Notes |\nRécupération post-séance en 3 points max\n\n## Progression S1 à S" + semaines + "\n| Semaine | Squat | Bench | Deadlift | Intensité | Focus |\n\n## Nutrition\n| Macro | Quantité | Kcal |\nTiming repas et suppléments en liste courte\n\n## Récupération et Conseils\n4-5 conseils clés en liste";
 }
 
 export default function PowerliftingGenerator() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
-    name: "", age: "", gender: "Homme", weight: "", height: "", height: "",
+    name: "", age: "", gender: "Homme", weight: "", height: "",
     objectif_precis: "", objectif_custom: "",
     niveau: "", frequency: "4", semaines: "8", jours: [],
     squat: "", bench: "", deadlift: "",
@@ -158,19 +96,19 @@ export default function PowerliftingGenerator() {
             if (raw === "[DONE]") continue;
             try {
               const json = JSON.parse(raw);
-              if (json.type === "content_block_delta" && json.delta?.text) {
+              if (json.type === "content_block_delta" && json.delta && json.delta.text) {
                 fullText += json.delta.text;
                 setProgram(fullText);
                 setProgress(Math.min(95, Math.round((fullText.length / 28000) * 100)));
               }
               if (json.type === "message_stop") setProgress(100);
-            } catch {}
+            } catch(e) {}
           }
         }
       }
       if (!fullText) setProgram("Erreur de connexion. Veuillez réessayer.");
       else setProgress(100);
-    } catch { setProgram("Erreur de connexion. Veuillez réessayer."); }
+    } catch(e) { setProgram("Erreur de connexion. Veuillez réessayer."); }
     setLoading(false);
   };
 
@@ -181,117 +119,103 @@ export default function PowerliftingGenerator() {
     };
     setExportingPDF(true);
     try {
-      const html2pdf = (await import('html2pdf.js')).default;
+      const html2pdf = (await import("html2pdf.js")).default;
       const total = (parseInt(finalForm.squat)||0)+(parseInt(finalForm.bench)||0)+(parseInt(finalForm.deadlift)||0);
 
-      const container = document.createElement('div');
-      container.style.cssText = 'font-family:Arial,Helvetica,sans-serif;font-size:9.5pt;color:#1a1a1a;background:#fff;width:190mm;padding:0;margin:0;';
-
-      const lines = program.split('\n');
-      let bodyHtml = '';
+      const lines = program.split("\n");
+      let bodyHtml = "";
       let inTable = false;
       let tableRows = [];
 
       function flushTable() {
         if (!tableRows.length) return;
         let t = '<table style="width:100%;border-collapse:collapse;margin:4px 0 8px 0;font-size:8.5pt;">';
-        tableRows.forEach((row, ri) => {
-          const bg = ri === 0 ? '#334155' : ri%2===0 ? '#f8fafc' : '#ffffff';
-          const color = ri === 0 ? '#ffffff' : '#1e293b';
-          const fw = ri === 0 ? '700' : '400';
+        tableRows.forEach(function(row, ri) {
+          const bg = ri === 0 ? "#334155" : ri%2===0 ? "#f8fafc" : "#ffffff";
+          const color = ri === 0 ? "#ffffff" : "#1e293b";
+          const fw = ri === 0 ? "700" : "400";
           t += '<tr style="background:' + bg + ';">';
-          row.forEach(cell => {
-            const tag = ri === 0 ? 'th' : 'td';
-            const align = ri === 0 ? 'left' : 'left';
-            t += '<' + tag + ' style="padding:4px 7px;border-bottom:1px solid #e2e8f0;color:' + color + ';font-weight:' + fw + ';font-size:8pt;text-align:' + align + ';">' + cell.trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') + '</' + tag + '>';
+          row.forEach(function(cell) {
+            const tag = ri === 0 ? "th" : "td";
+            t += "<" + tag + ' style="padding:4px 7px;border-bottom:1px solid #e2e8f0;color:' + color + ";font-weight:" + fw + ';font-size:8pt;text-align:left;">' + cell.trim().replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") + "</" + tag + ">";
           });
-          t += '</tr>';
+          t += "</tr>";
         });
-        t += '</table>';
+        t += "</table>";
         bodyHtml += t;
         tableRows = [];
         inTable = false;
       }
 
-      for (const line of lines) {
-        if (line.startsWith('|')) {
-          const cells = line.split('|').filter((_,i,a) => i>0 && i<a.length-1);
-          if (!cells.every(c => c.trim().match(/^[-:]+$/))) { tableRows.push(cells); inTable = true; }
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line.startsWith("|")) {
+          const cells = line.split("|").filter(function(_, idx, arr) { return idx > 0 && idx < arr.length - 1; });
+          if (!cells.every(function(c) { return c.trim().match(/^[-:]+$/); })) {
+            tableRows.push(cells); inTable = true;
+          }
           continue;
         }
         if (inTable) flushTable();
         if (!line.trim()) { bodyHtml += '<div style="height:5px;"></div>'; continue; }
-        if (line.startsWith('# ')) {
-          bodyHtml += '<div style="background:#1e293b;color:#ffffff;padding:7px 14px;font-size:11.5pt;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin:14px 0 5px 0;">' + line.slice(2) + '</div>';
+        if (line.startsWith("# ")) {
+          bodyHtml += '<div style="background:#1e293b;color:#ffffff;padding:7px 14px;font-size:11.5pt;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin:14px 0 5px 0;">' + line.slice(2) + "</div>";
           continue;
         }
-        if (line.startsWith('## ')) {
-          bodyHtml += '<div style="background:#f1f5f9;border-left:3px solid #06b6d4;color:#1e293b;padding:5px 10px;font-size:10pt;font-weight:700;margin:10px 0 5px 0;">' + line.slice(3) + '</div>';
+        if (line.startsWith("## ")) {
+          bodyHtml += '<div style="background:#f1f5f9;border-left:3px solid #06b6d4;color:#1e293b;padding:5px 10px;font-size:10pt;font-weight:700;margin:10px 0 5px 0;">' + line.slice(3) + "</div>";
           continue;
         }
-        if (line.startsWith('### ')) {
-          bodyHtml += '<div style="color:#1e293b;font-size:9pt;font-weight:700;margin:7px 0 3px 0;padding-bottom:3px;border-bottom:1px solid #e2e8f0;">' + line.slice(4) + '</div>';
+        if (line.startsWith("### ")) {
+          bodyHtml += '<div style="color:#1e293b;font-size:9pt;font-weight:700;margin:7px 0 3px 0;padding-bottom:3px;border-bottom:1px solid #e2e8f0;">' + line.slice(4) + "</div>";
           continue;
         }
-        if (line.startsWith('- ') || line.startsWith('* ')) {
-          bodyHtml += '<div style="display:flex;gap:7px;margin-bottom:2px;"><span style="color:#06b6d4;font-weight:700;flex-shrink:0;">•</span><span style="font-size:8.5pt;color:#334155;line-height:1.6;">' + line.slice(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') + '</span></div>';
+        if (line.startsWith("- ") || line.startsWith("* ")) {
+          bodyHtml += '<div style="display:flex;gap:7px;margin-bottom:2px;"><span style="color:#06b6d4;font-weight:700;flex-shrink:0;">&#8226;</span><span style="font-size:8.5pt;color:#334155;line-height:1.6;">' + line.slice(2).replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") + "</span></div>";
           continue;
         }
-        const formatted = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        bodyHtml += '<p style="font-size:8.5pt;color:#334155;line-height:1.6;margin:2px 0;">' + formatted + '</p>';
+        const formatted = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+        bodyHtml += '<p style="font-size:8.5pt;color:#334155;line-height:1.6;margin:2px 0;">' + formatted + "</p>";
       }
       if (inTable) flushTable();
 
-      container.innerHTML = \`
-        <div style="background:#07050f;padding:14px 20px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #06b6d4;margin-bottom:0;">
-          <div>
-            <div style="font-size:20pt;font-weight:900;color:#06b6d4;letter-spacing:2px;">LA FORGE AI</div>
-            <div style="font-size:8pt;color:#7dd3e0;margin-top:2px;">Générateur Powerlifting — Programme personnalisé par IA</div>
-          </div>
-          <div style="color:#7dd3e0;font-size:8pt;">\${new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})}</div>
-        </div>
+      const container = document.createElement("div");
+      container.style.cssText = "font-family:Arial,Helvetica,sans-serif;font-size:9.5pt;color:#1a1a1a;background:#fff;width:190mm;padding:0;margin:0;";
 
-        <div style="padding:14px 20px;background:#f8fafc;border-bottom:1px solid #e2e8f0;">
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px 14px;margin-bottom:10px;">
-            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Athlète</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.name||'—'}</div></div>
-            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Âge</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.age?finalForm.age+' ans':'—'}</div></div>
-            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Poids</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.weight?finalForm.weight+' kg':'—'}</div></div>
-            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Niveau</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.niveau||'—'}</div></div>
-            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Squat 1RM</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.squat?finalForm.squat+' kg':'—'}</div></div>
-            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Bench 1RM</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.bench?finalForm.bench+' kg':'—'}</div></div>
-            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Deadlift 1RM</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.deadlift?finalForm.deadlift+' kg':'—'}</div></div>
-            <div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Durée</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">\${finalForm.semaines} semaines</div></div>
-          </div>
-          \${total > 0 ? '<div style="background:#06b6d4;color:#fff;text-align:center;padding:6px;border-radius:4px;font-weight:700;font-size:10pt;letter-spacing:1px;">TOTAL : ' + total + ' KG</div>' : ''}
-        </div>
+      const headerHtml = '<div style="background:#07050f;padding:14px 20px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #06b6d4;margin-bottom:0;"><div><div style="font-size:20pt;font-weight:900;color:#06b6d4;letter-spacing:2px;">LA FORGE AI</div><div style="font-size:8pt;color:#7dd3e0;margin-top:2px;">G&eacute;n&eacute;rateur Powerlifting &mdash; Programme personnalis&eacute; par IA</div></div><div style="color:#7dd3e0;font-size:8pt;">' + new Date().toLocaleDateString("fr-FR", {day:"numeric",month:"long",year:"numeric"}) + "</div></div>";
 
-        \${finalForm.objectif_precis ? '<div style="margin:10px 20px 0;padding:7px 12px;background:#f1f5f9;border-left:4px solid #06b6d4;border-radius:0 4px 4px 0;font-size:9pt;color:#0f172a;"><strong style="color:#0284c7;">Objectif : </strong>' + finalForm.objectif_precis + '</div>' : ''}
+      const profilHtml = '<div style="padding:14px 20px;background:#f8fafc;border-bottom:1px solid #e2e8f0;"><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px 14px;margin-bottom:10px;">' +
+        '<div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Athl&egrave;te</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">' + (finalForm.name||"&mdash;") + "</div></div>" +
+        '<div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">&Acirc;ge</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">' + (finalForm.age ? finalForm.age+" ans" : "&mdash;") + "</div></div>" +
+        '<div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Poids</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">' + (finalForm.weight ? finalForm.weight+" kg" : "&mdash;") + "</div></div>" +
+        '<div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Niveau</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">' + (finalForm.niveau||"&mdash;") + "</div></div>" +
+        '<div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Squat 1RM</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">' + (finalForm.squat ? finalForm.squat+" kg" : "&mdash;") + "</div></div>" +
+        '<div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Bench 1RM</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">' + (finalForm.bench ? finalForm.bench+" kg" : "&mdash;") + "</div></div>" +
+        '<div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Deadlift 1RM</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">' + (finalForm.deadlift ? finalForm.deadlift+" kg" : "&mdash;") + "</div></div>" +
+        '<div><div style="font-size:7pt;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Dur&eacute;e</div><div style="font-size:11pt;font-weight:700;color:#0f172a;">' + finalForm.semaines + " semaines</div></div>" +
+        "</div>" + (total > 0 ? '<div style="background:#06b6d4;color:#fff;text-align:center;padding:6px;border-radius:4px;font-weight:700;font-size:10pt;letter-spacing:1px;">TOTAL : ' + total + " KG</div>" : "") + "</div>";
 
-        <div style="padding:0 20px 14px 20px;">
-          \${bodyHtml}
-        </div>
+      const objectifHtml = finalForm.objectif_precis ? '<div style="margin:10px 20px 0;padding:7px 12px;background:#f1f5f9;border-left:4px solid #06b6d4;border-radius:0 4px 4px 0;font-size:9pt;color:#0f172a;"><strong style="color:#0284c7;">Objectif : </strong>' + finalForm.objectif_precis + "</div>" : "";
 
-        <div style="border-top:2px solid #06b6d4;padding:8px 20px;display:flex;justify-content:space-between;background:#f8fafc;">
-          <span style="font-size:7.5pt;color:#64748b;">La Forge AI — Programme Powerlifting généré par IA</span>
-          <span style="font-size:7.5pt;color:#64748b;">\${finalForm.name||'Athlète'} | \${new Date().toLocaleDateString('fr-FR')}</span>
-        </div>
-      \`;
+      const footerHtml = '<div style="border-top:2px solid #06b6d4;padding:8px 20px;display:flex;justify-content:space-between;background:#f8fafc;"><span style="font-size:7.5pt;color:#64748b;">La Forge AI &mdash; Programme Powerlifting g&eacute;n&eacute;r&eacute; par IA</span><span style="font-size:7.5pt;color:#64748b;">' + (finalForm.name||"Athl&egrave;te") + " | " + new Date().toLocaleDateString("fr-FR") + "</span></div>";
+
+      container.innerHTML = headerHtml + profilHtml + objectifHtml + '<div style="padding:0 20px 14px 20px;">' + bodyHtml + "</div>" + footerHtml;
 
       document.body.appendChild(container);
 
       const opt = {
         margin: [8, 8, 8, 8],
-        filename: 'programme_powerlifting_' + (finalForm.name||'athlete').toLowerCase().replace(/\s+/g,'_') + '.pdf',
-        image: { type: 'jpeg', quality: 0.97 },
+        filename: "programme_powerlifting_" + (finalForm.name||"athlete").toLowerCase().replace(/\s+/g, "_") + ".pdf",
+        image: { type: "jpeg", quality: 0.97 },
         html2canvas: { scale: 2, useCORS: true, letterRendering: true, windowWidth: 794 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', 'div'] }
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ["css", "legacy"], avoid: ["tr", "div"] }
       };
 
       await html2pdf().set(opt).from(container).save();
       document.body.removeChild(container);
     } catch(e) {
-      alert('Erreur PDF : ' + e.message);
+      alert("Erreur PDF : " + e.message);
     }
     setExportingPDF(false);
   };
@@ -299,24 +223,24 @@ export default function PowerliftingGenerator() {
   const reset = () => { setStep(1); setProgram(""); setProgress(0); };
 
   const renderMD = (text) => text.split("\n").map((line, i) => {
-    if (line.startsWith("# ")) return <h1 key={i} style={{ color: C, fontSize: "1.3rem", fontFamily: "'Bebas Neue',cursive", marginTop: "1.5rem", borderBottom: `2px solid ${C}`, paddingBottom: "0.3rem" }}>{line.slice(2)}</h1>;
+    if (line.startsWith("# ")) return <h1 key={i} style={{ color: C, fontSize: "1.3rem", fontFamily: "'Bebas Neue',cursive", marginTop: "1.5rem", borderBottom: "2px solid " + C, paddingBottom: "0.3rem" }}>{line.slice(2)}</h1>;
     if (line.startsWith("## ")) return <h2 key={i} style={{ color: C, fontSize: "1.05rem", marginTop: "1.2rem", fontWeight: 700 }}>{line.slice(3)}</h2>;
     if (line.startsWith("### ")) return <h3 key={i} style={{ color: "#67e8f9", fontSize: "0.95rem", marginTop: "0.8rem", fontWeight: 600 }}>{line.slice(4)}</h3>;
     if (line.startsWith("- ") || line.startsWith("* ")) return <div key={i} style={{ display: "flex", gap: "0.5rem", margin: "0.2rem 0" }}><span style={{ color: C, fontSize: "0.5rem", marginTop: "0.4rem" }}>◆</span><span style={{ color: "#cffafe", fontSize: "0.88rem", lineHeight: 1.7 }}>{line.slice(2)}</span></div>;
     if (line.startsWith("|")) {
       const cells = line.split("|").filter((_, i, a) => i > 0 && i < a.length - 1);
       if (cells.every(c => c.trim().match(/^[-:]+$/))) return null;
-      return <div key={i} style={{ display: "grid", gridTemplateColumns: `repeat(${cells.length}, 1fr)`, gap: "1px", marginBottom: "1px" }}>{cells.map((cell, ci) => <div key={ci} style={{ background: "#0c1a20", padding: "0.3rem 0.5rem", fontSize: "0.75rem", color: "#a5f3fc", borderLeft: ci === 0 ? `2px solid ${C}` : "none" }}>{cell.trim()}</div>)}</div>;
+      return <div key={i} style={{ display: "grid", gridTemplateColumns: "repeat(" + cells.length + ", 1fr)", gap: "1px", marginBottom: "1px" }}>{cells.map((cell, ci) => <div key={ci} style={{ background: "#0c1a20", padding: "0.3rem 0.5rem", fontSize: "0.75rem", color: "#a5f3fc", borderLeft: ci === 0 ? "2px solid " + C : "none" }}>{cell.trim()}</div>)}</div>;
     }
     if (!line.trim()) return <br key={i} />;
     const parts = line.split(/\*\*(.*?)\*\*/g);
     return <p key={i} style={{ color: "#a5f3fc80", fontSize: "0.88rem", lineHeight: 1.8, margin: "0.15rem 0" }}>{parts.map((p, j) => j % 2 === 1 ? <strong key={j} style={{ color: "#e0f7fa" }}>{p}</strong> : p)}</p>;
   });
 
-  const chip = (active) => ({ padding: "0.45rem 0.75rem", borderRadius: 8, cursor: "pointer", fontSize: "0.82rem", fontFamily: "inherit", transition: "all 0.15s", background: active ? `${C}22` : "#0a0814", color: active ? C : "#4a6070", border: `1px solid ${active ? C : "#1a2535"}`, fontWeight: active ? 700 : 400 });
+  const chip = (active) => ({ padding: "0.45rem 0.75rem", borderRadius: 8, cursor: "pointer", fontSize: "0.82rem", fontFamily: "inherit", transition: "all 0.15s", background: active ? C + "22" : "#0a0814", color: active ? C : "#4a6070", border: "1px solid " + (active ? C : "#1a2535"), fontWeight: active ? 700 : 400 });
   const lbl = { display: "block", fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "#2a4050", marginBottom: "0.4rem" };
   const inp = { width: "100%", background: "#0a0814", border: "1px solid #1a2535", borderRadius: 8, padding: "0.6rem 0.8rem", color: "#cffafe", fontSize: "0.88rem", outline: "none", boxSizing: "border-box", fontFamily: "inherit" };
-  const pBtn = (disabled) => ({ width: "100%", padding: "0.85rem", borderRadius: 10, fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", fontSize: "1.05rem", border: "none", cursor: disabled ? "not-allowed" : "pointer", background: disabled ? "#0a1520" : `linear-gradient(135deg, ${C}, #0891b2)`, color: disabled ? "#1a3040" : "#07050f", fontWeight: 700, boxShadow: disabled ? "none" : `0 4px 20px ${C}44` });
+  const pBtn = (disabled) => ({ width: "100%", padding: "0.85rem", borderRadius: 10, fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", fontSize: "1.05rem", border: "none", cursor: disabled ? "not-allowed" : "pointer", background: disabled ? "#0a1520" : "linear-gradient(135deg, " + C + ", #0891b2)", color: disabled ? "#1a3040" : "#07050f", fontWeight: 700, boxShadow: disabled ? "none" : "0 4px 20px " + C + "44" });
   const card = { padding: "1rem", background: "#080612", borderRadius: 10, border: "1px solid #1a2535", marginBottom: "1rem" };
 
   const FreqRow = ({ label: l, field, opts = ["1","2","3","4"] }) => (
@@ -332,7 +256,7 @@ export default function PowerliftingGenerator() {
     <div style={{ marginBottom: "0.8rem" }}>
       <label style={lbl}>{l}</label>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-        {options.map(o => <button key={o} onClick={() => toggleArr(field, o)} style={{ ...chip(form[field]?.includes(o)), fontSize: "0.75rem", padding: "0.3rem 0.6rem" }}>{o}</button>)}
+        {options.map(o => <button key={o} onClick={() => toggleArr(field, o)} style={{ ...chip(form[field] && form[field].includes(o)), fontSize: "0.75rem", padding: "0.3rem 0.6rem" }}>{o}</button>)}
       </div>
     </div>
   );
@@ -340,9 +264,8 @@ export default function PowerliftingGenerator() {
   return (
     <div style={{ minHeight: "100vh", background: "#07050f", fontFamily: "'DM Sans',sans-serif", color: "#cffafe", display: "flex", flexDirection: "column", alignItems: "center", padding: "1.5rem 1rem" }}>
       <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
-      <style>{`input::placeholder{color:#1a3040}input:focus{border-color:${C}!important}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#0e4a5a;border-radius:2px}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}`}</style>
+      <style>{"input::placeholder{color:#1a3040}input:focus{border-color:" + C + "!important}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#0e4a5a;border-radius:2px}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}"}</style>
 
-      {/* HEADER */}
       <div style={{ width: "100%", maxWidth: 680, marginBottom: "1.5rem" }}>
         <div style={{ fontSize: "0.6rem", letterSpacing: "0.3em", color: C, textTransform: "uppercase" }}>La Forge AI</div>
         <h1 style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "2.4rem", letterSpacing: "0.06em", margin: 0, color: "#fff", lineHeight: 1 }}>
@@ -352,24 +275,23 @@ export default function PowerliftingGenerator() {
       </div>
 
       <div style={{ width: "100%", maxWidth: 680 }}>
-        {/* STEPPER */}
         {step < 3 && (
           <div style={{ display: "flex", gap: "0.4rem", marginBottom: "1.5rem", alignItems: "center" }}>
-            {[1, 2].map(s => (<div key={s} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-              <div style={{ width: 28, height: 28, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: step >= s ? C : "#0a0814", color: step >= s ? "#07050f" : "#1a3040", fontWeight: 700, fontSize: "0.8rem", border: `1px solid ${step >= s ? C : "#1a2535"}` }}>{s}</div>
-              {s < 2 && <div style={{ width: 40, height: 2, background: step > s ? C : "#1a2535" }} />}
-            </div>))}
+            {[1, 2].map(s => (
+              <div key={s} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: step >= s ? C : "#0a0814", color: step >= s ? "#07050f" : "#1a3040", fontWeight: 700, fontSize: "0.8rem", border: "1px solid " + (step >= s ? C : "#1a2535") }}>{s}</div>
+                {s < 2 && <div style={{ width: 40, height: 2, background: step > s ? C : "#1a2535" }} />}
+              </div>
+            ))}
             <span style={{ marginLeft: "0.5rem", fontSize: "0.78rem", color: "#1a4050" }}>{step === 1 ? "Programme & Objectifs" : "Profil & 1RM"}</span>
           </div>
         )}
 
-        <div style={{ background: "#080612", border: "1px solid #1a2535", borderRadius: 16, padding: "1.75rem", boxShadow: `0 20px 60px rgba(6,182,212,0.08)`, animation: "fadeIn 0.3s ease" }}>
+        <div style={{ background: "#080612", border: "1px solid #1a2535", borderRadius: 16, padding: "1.75rem", boxShadow: "0 20px 60px rgba(6,182,212,0.08)", animation: "fadeIn 0.3s ease" }}>
 
-          {/* STEP 1 */}
           {step === 1 && (
             <>
               <h2 style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "1.4rem", color: C, marginTop: 0 }}>Programme & Objectifs</h2>
-
               <label style={lbl}>Objectif précis</label>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", marginBottom: "1.2rem" }}>
                 {OBJECTIFS_PRECIS.map(o => <button key={o} onClick={() => update("objectif_precis", o)} style={{ ...chip(form.objectif_precis === o), textAlign: "left", fontSize: "0.82rem" }}>{form.objectif_precis === o ? "▶ " : "○ "}{o}</button>)}
@@ -377,52 +299,43 @@ export default function PowerliftingGenerator() {
               {form.objectif_precis === "Objectif personnalisé..." && (
                 <input style={{ ...inp, marginBottom: "1.2rem" }} placeholder="Ex: Passer mon total de 500 à 600 kg en 16 semaines..." value={form.objectif_custom} onChange={e => update("objectif_custom", e.target.value)} />
               )}
-
               <label style={lbl}>Niveau</label>
               <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.2rem" }}>
                 {NIVEAUX.map(n => <button key={n} onClick={() => update("niveau", n)} style={{ ...chip(form.niveau === n), flex: 1 }}>{n}</button>)}
               </div>
-
               <label style={lbl}>Séances / semaine</label>
               <div style={{ display: "flex", gap: "0.4rem", marginBottom: "1.2rem" }}>
                 {FREQUENCES.map(f => <button key={f} onClick={() => update("frequency", f)} style={{ ...chip(form.frequency === f), flex: 1 }}>{f}x</button>)}
               </div>
-
               <label style={lbl}>Durée du programme</label>
               <div style={{ display: "flex", gap: "0.4rem", marginBottom: "1.2rem" }}>
                 {SEMAINES.map(s => <button key={s} onClick={() => update("semaines", s)} style={{ ...chip(form.semaines === s), flex: 1 }}>{s} sem</button>)}
               </div>
-
               <div style={card}>
                 <label style={{ ...lbl, color: C, marginBottom: "0.8rem" }}>📅 Jours souhaités (optionnel)</label>
                 <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
                   {JOURS.map(j => <button key={j} onClick={() => toggleArr("jours", j)} style={{ ...chip(form.jours.includes(j)), flex: 1, minWidth: "2.5rem" }}>{j}</button>)}
                 </div>
               </div>
-
               <div style={card}>
                 <label style={{ ...lbl, color: C, marginBottom: "0.8rem" }}>🏋️ Fréquence par mouvement</label>
                 <FreqRow label="Squat (x/semaine)" field="squat_freq" />
                 <FreqRow label="Bench Press (x/semaine)" field="bench_freq" />
                 <FreqRow label="Deadlift (x/semaine)" field="deadlift_freq" />
               </div>
-
               <button onClick={() => setStep(2)} disabled={!canProceed1} style={pBtn(!canProceed1)}>Continuer →</button>
             </>
           )}
 
-          {/* STEP 2 */}
           {step === 2 && (
             <>
               <h2 style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "1.4rem", color: C, marginTop: 0 }}>Profil & 1RM</h2>
-
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.8rem", marginBottom: "1rem" }}>
                 {[["Prénom", "name", "text", "Alex"], ["Âge", "age", "number", "25"], ["Taille cm", "height", "number", "175"], ["Poids kg", "weight", "number", "90"]].map(([l, key, type, ph]) => (
                   <div key={key}><label style={lbl}>{l}</label><input style={inp} type={type} placeholder={ph} value={form[key]} onChange={e => update(key, e.target.value)} /></div>
                 ))}
                 <div><label style={lbl}>Genre</label><div style={{ display: "flex", gap: "0.5rem" }}>{["Homme", "Femme"].map(g => <button key={g} onClick={() => update("gender", g)} style={{ ...chip(form.gender === g), flex: 1 }}>{g}</button>)}</div></div>
               </div>
-
               <div style={card}>
                 <label style={{ ...lbl, color: C, marginBottom: "0.8rem" }}>1RM actuels *</label>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.6rem" }}>
@@ -431,12 +344,11 @@ export default function PowerliftingGenerator() {
                   ))}
                 </div>
                 {form.squat && form.bench && form.deadlift && (
-                  <div style={{ marginTop: "0.8rem", padding: "0.6rem", background: `${C}15`, borderRadius: 8, textAlign: "center", fontSize: "0.88rem", color: C, fontWeight: 700 }}>
+                  <div style={{ marginTop: "0.8rem", padding: "0.6rem", background: C + "15", borderRadius: 8, textAlign: "center", fontSize: "0.88rem", color: C, fontWeight: 700 }}>
                     Total : {(parseInt(form.squat)||0)+(parseInt(form.bench)||0)+(parseInt(form.deadlift)||0)} kg
                   </div>
                 )}
               </div>
-
               <div style={card}>
                 <button onClick={() => setShowExo(!showExo)} style={{ background: "none", border: "none", cursor: "pointer", color: C, fontFamily: "inherit", fontSize: "0.88rem", fontWeight: 700, padding: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
                   {showExo ? "▼" : "▶"} Variantes & accessoires (optionnel)
@@ -451,20 +363,17 @@ export default function PowerliftingGenerator() {
                   </div>
                 )}
               </div>
-
               <div style={{ marginBottom: "1.2rem" }}>
                 <label style={lbl}>Blessures / contraintes</label>
                 <input style={inp} placeholder="Genou fragile, douleur épaule..." value={form.injuries} onChange={e => update("injuries", e.target.value)} />
               </div>
-
               <div style={{ display: "flex", gap: "0.6rem" }}>
                 <button onClick={() => setStep(1)} style={{ ...pBtn(false), background: "#0a0814", boxShadow: "none", border: "1px solid #1a2535", color: "#2a4050", flex: "0 0 auto", width: "auto", padding: "0.85rem 1.4rem" }}>←</button>
-                <button onClick={generateProgram} disabled={!canGenerate} style={{ ...pBtn(!canGenerate), flex: 1, width: "auto" }}>🔨 Générer le programme</button>
+                <button onClick={generateProgram} disabled={!canGenerate} style={{ ...pBtn(!canGenerate), flex: 1, width: "auto" }}>⚡ Générer le programme</button>
               </div>
             </>
           )}
 
-          {/* STEP 3 — RÉSULTAT */}
           {step === 3 && (
             <>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.2rem" }}>
@@ -476,7 +385,6 @@ export default function PowerliftingGenerator() {
                   </div>
                 )}
               </div>
-
               {loading && (
                 <div style={{ marginBottom: "1.2rem" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.4rem" }}>
@@ -484,31 +392,29 @@ export default function PowerliftingGenerator() {
                     <span style={{ fontSize: "0.78rem", color: C, fontWeight: 700 }}>{progress}%</span>
                   </div>
                   <div style={{ height: 6, background: "#0a0814", borderRadius: 4, overflow: "hidden", border: "1px solid #1a2535" }}>
-                    <div style={{ height: "100%", width: `${progress}%`, background: `linear-gradient(90deg, ${C}, #0891b2)`, borderRadius: 4, transition: "width 0.4s ease" }} />
+                    <div style={{ height: "100%", width: progress + "%", background: "linear-gradient(90deg, " + C + ", #0891b2)", borderRadius: 4, transition: "width 0.4s ease" }} />
                   </div>
                 </div>
               )}
-
               {loading && !program && (
                 <div style={{ textAlign: "center", padding: "2rem 0" }}>
                   <div style={{ fontSize: "2.5rem", animation: "pulse 1.2s infinite" }}>🔨</div>
-                  <p style={{ color: "#1a4050", marginTop: "1rem", fontSize: "0.88rem" }}>Connexion à l'IA...</p>
+                  <p style={{ color: "#1a4050", marginTop: "1rem", fontSize: "0.88rem" }}>Connexion à l&apos;IA...</p>
                 </div>
               )}
-
               {program && (
                 <>
                   {!loading && (
                     <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-                      {[form.niveau, form.objectif_precis !== "Objectif personnalisé..." ? form.objectif_precis : form.objectif_custom, `${form.frequency}x/sem`, `${form.semaines} sem`].filter(Boolean).map((tag, i) => (
-                        <span key={i} style={{ padding: "0.2rem 0.7rem", background: `${C}15`, border: `1px solid ${C}40`, borderRadius: 20, fontSize: "0.75rem", color: C }}>{tag}</span>
+                      {[form.niveau, form.objectif_precis !== "Objectif personnalisé..." ? form.objectif_precis : form.objectif_custom, form.frequency + "x/sem", form.semaines + " sem"].filter(Boolean).map((tag, i) => (
+                        <span key={i} style={{ padding: "0.2rem 0.7rem", background: C + "15", border: "1px solid " + C + "40", borderRadius: 20, fontSize: "0.75rem", color: C }}>{tag}</span>
                       ))}
                     </div>
                   )}
                   <div style={{ background: "#050810", border: "1px solid #1a2535", borderRadius: 10, padding: "1.25rem", maxHeight: "55vh", overflowY: "auto" }}>
                     {renderMD(program)}
                   </div>
-                  {!loading && <div style={{ marginTop: "0.75rem", padding: "0.5rem 1rem", background: "#050e12", borderRadius: 8, border: "1px solid #0e3040", fontSize: "0.75rem", color: "#1a6070" }}>Programme généré par IA — à affiner selon les retours de l'athlète</div>}
+                  {!loading && <div style={{ marginTop: "0.75rem", padding: "0.5rem 1rem", background: "#050e12", borderRadius: 8, border: "1px solid #0e3040", fontSize: "0.75rem", color: "#1a6070" }}>Programme généré par IA — à affiner selon les retours de l&apos;athlète</div>}
                 </>
               )}
             </>
