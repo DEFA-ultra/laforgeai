@@ -51,7 +51,7 @@ export default function Landing() {
         </p>
         <div className="fade-up-4" style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
           <a href="https://buy.stripe.com/00weVf5KYa77g87fyhe7m00" className="cta-btn" style={{ background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "1rem 2.5rem", borderRadius: 10, fontWeight: 700, fontSize: "1.1rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", boxShadow: `0 4px 24px ${C}44`, display: "inline-block" }}>
-            🔨 GÉNÉRER MON PROGRAMME — 29€
+            🔨 GÉNÉRER MON PROGRAMME — 19€
           </a>
         </div>
         <p style={{ marginTop: "1rem", color: "#1a4050", fontSize: "0.8rem" }}>Téléchargement PDF immédiat • Paiement sécurisé</p>
@@ -129,8 +129,8 @@ export default function Landing() {
           <p style={{ color: "#1a4050", marginBottom: "2.5rem", fontSize: "0.9rem" }}>Un programme, un prix</p>
           <div style={{ background: "#07050f", border: `2px solid ${C}`, borderRadius: 16, padding: "2.5rem", marginBottom: "1.5rem" }}>
             <div style={{ fontSize: "0.8rem", color: C, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "0.5rem" }}>Programme Powerlifting</div>
-            <div style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "4rem", color: "#fff", lineHeight: 1 }}>29€</div>
-            <div style={{ color: "#1a4050", fontSize: "0.8rem", marginBottom: "2rem" }}>par programme généré</div>
+            <div style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "4rem", color: "#fff", lineHeight: 1 }}><span style={{ textDecoration: "line-through", color: "#1a4050", fontSize: "2rem" }}>29€</span> 19€</div>
+            <div style={{ color: "#e85d04", fontSize: "0.85rem", fontWeight: 700, marginBottom: "2rem" }}>🔥 Offre de lancement — durée limitée</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem", marginBottom: "2rem", textAlign: "left" }}>
               {["Programme complet personnalisé", "Charges en kg calculées", "Progression S1 à S16", "Nutrition & récupération", "Export PDF immédiat"].map((item, i) => (
                 <div key={i} style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
