@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const C = "#06b6d4";
-const STRIPE_LINK = "https://buy.stripe.com/00weVf5KYa77g87fyhe7m00";
+const STRIPE_LINK = "https://buy.stripe.com/8x214p1uI0wx5ttcm5e7m01";
 
 export default function Landing() {
   const [hovering, setHovering] = useState(false);
@@ -31,7 +31,7 @@ export default function Landing() {
           <div style={{ fontSize: "0.55rem", letterSpacing: "0.3em", color: C, textTransform: "uppercase" }}>Programme IA</div>
           <div style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "1.5rem", color: "#fff", letterSpacing: "0.06em", lineHeight: 1 }}>LA FORGE <span style={{ color: C }}>AI</span></div>
         </div>
-        <a href="https://buy.stripe.com/00weVf5KYa77g87fyhe7m00" style={{ background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "0.6rem 1.4rem", borderRadius: 8, fontWeight: 700, fontSize: "0.88rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.1em" }}>
+        <a href="https://buy.stripe.com/8x214p1uI0wx5ttcm5e7m01" style={{ background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "0.6rem 1.4rem", borderRadius: 8, fontWeight: 700, fontSize: "0.88rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.1em" }}>
           GÉNÉRER MON PROGRAMME
         </a>
       </nav>
@@ -50,7 +50,7 @@ export default function Landing() {
           Programme 100% personnalisé basé sur tes 1RM, ta fréquence et tes objectifs. Charges calculées en kg, progression semaine par semaine, nutrition incluse.
         </p>
         <div className="fade-up-4" style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-          <a href="https://buy.stripe.com/00weVf5KYa77g87fyhe7m00" className="cta-btn" style={{ background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "1rem 2.5rem", borderRadius: 10, fontWeight: 700, fontSize: "1.1rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", boxShadow: `0 4px 24px ${C}44`, display: "inline-block" }}>
+          <a href="https://buy.stripe.com/8x214p1uI0wx5ttcm5e7m01" className="cta-btn" style={{ background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "1rem 2.5rem", borderRadius: 10, fontWeight: 700, fontSize: "1.1rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", boxShadow: `0 4px 24px ${C}44`, display: "inline-block" }}>
             🔨 GÉNÉRER MON PROGRAMME — 19€
           </a>
         </div>
@@ -139,7 +139,7 @@ export default function Landing() {
                 </div>
               ))}
             </div>
-            <a href="https://buy.stripe.com/00weVf5KYa77g87fyhe7m00" className="cta-btn" style={{ display: "block", background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "1rem", borderRadius: 10, fontWeight: 700, fontSize: "1.1rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", boxShadow: `0 4px 24px ${C}44` }}>
+            <a href="https://buy.stripe.com/8x214p1uI0wx5ttcm5e7m01" className="cta-btn" style={{ display: "block", background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "1rem", borderRadius: 10, fontWeight: 700, fontSize: "1.1rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", boxShadow: `0 4px 24px ${C}44` }}>
               🔨 GÉNÉRER MON PROGRAMME
             </a>
           </div>
