@@ -32,7 +32,7 @@ export default function Landing() {
           <div style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "1.5rem", color: "#fff", letterSpacing: "0.06em", lineHeight: 1 }}>LA FORGE <span style={{ color: C }}>AI</span></div>
         </div>
         <a href={STRIPE_LINK} className="cta-btn" style={{ background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "0.6rem 1.4rem", borderRadius: 8, fontWeight: 700, fontSize: "0.88rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.1em" }}>
-          GÉNÉRER MON PROGRAMME
+          CHOISIR MON PROGRAMME
         </a>
       </nav>
 
@@ -43,15 +43,14 @@ export default function Landing() {
         </div>
         <h1 className="fade-up-2" style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "clamp(2.8rem, 8vw, 5rem)", lineHeight: 1.05, margin: "0 0 1.5rem 0", color: "#fff", letterSpacing: "0.03em" }}>
           L&apos;IA CRÉÉE PAR UN ATHLÈTE<br />
-          <span style={{ color: C }}>DE POWERLIFTING</span><br />
-          POUR DES ATHLÈTES
+          <span style={{ color: C }}>POUR DES ATHLÈTES</span>
         </h1>
         <p className="fade-up-3" style={{ fontSize: "1.1rem", color: "#7dd3e0", lineHeight: 1.8, marginBottom: "2.5rem", maxWidth: 580, margin: "0 auto 2.5rem" }}>
-          Programme 100% personnalisé basé sur ton profil, tes objectifs et ton niveau. Charges calculées, nutrition incluse, PDF immédiat.
+          Powerlifting ou Musculation — programme 100% personnalisé basé sur ton profil et tes objectifs. Charges calculées, nutrition incluse, PDF immédiat.
         </p>
         <div className="fade-up-4" style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-          <a href={STRIPE_LINK} className="cta-btn" style={{ background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "1rem 2.5rem", borderRadius: 10, fontWeight: 700, fontSize: "1.1rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", boxShadow: `0 4px 24px ${C}44`, display: "inline-block" }}>
-            🔨 GÉNÉRER MON PROGRAMME — 19€
+          <a href="#generateurs" className="cta-btn" style={{ background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "1rem 2.5rem", borderRadius: 10, fontWeight: 700, fontSize: "1.1rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", boxShadow: `0 4px 24px ${C}44`, display: "inline-block" }}>
+            🔨 CHOISIR MON GÉNÉRATEUR — 19€
           </a>
         </div>
         <p style={{ marginTop: "1rem", color: "#1a4050", fontSize: "0.8rem" }}>Téléchargement PDF immédiat • Paiement sécurisé</p>
@@ -61,7 +60,7 @@ export default function Landing() {
       <div style={{ height: 1, background: `linear-gradient(90deg, transparent, ${C}44, transparent)`, margin: "0 2rem" }} />
 
       {/* CHOIX GÉNÉRATEUR */}
-      <section style={{ padding: "4rem 1.5rem", maxWidth: 900, margin: "0 auto" }}>
+      <section id="generateurs" style={{ padding: "4rem 1.5rem", maxWidth: 900, margin: "0 auto" }}>
         <h2 style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "2.2rem", color: "#fff", textAlign: "center", marginBottom: "0.5rem" }}>
           CHOISIT TON <span style={{ color: C }}>GÉNÉRATEUR</span>
         </h2>
