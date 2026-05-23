@@ -31,7 +31,7 @@ export default function Landing() {
           <div style={{ fontSize: "0.55rem", letterSpacing: "0.3em", color: C, textTransform: "uppercase" }}>Programme IA</div>
           <div style={{ fontFamily: "'Bebas Neue',cursive", fontSize: "1.5rem", color: "#fff", letterSpacing: "0.06em", lineHeight: 1 }}>LA FORGE <span style={{ color: C }}>AI</span></div>
         </div>
-        <a href={STRIPE_LINK} className="cta-btn" style={{ background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "0.6rem 1.4rem", borderRadius: 8, fontWeight: 700, fontSize: "0.88rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.1em" }}>
+        <a href="#generateurs" style={{ background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "0.6rem 1.4rem", borderRadius: 8, fontWeight: 700, fontSize: "0.88rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.1em" }}>
           CHOISIR MON PROGRAMME
         </a>
       </nav>
@@ -198,8 +198,8 @@ export default function Landing() {
                 </div>
               ))}
             </div>
-            <a href={STRIPE_LINK} className="cta-btn" style={{ display: "block", background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "1rem", borderRadius: 10, fontWeight: 700, fontSize: "1.1rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", boxShadow: `0 4px 24px ${C}44` }}>
-              🔨 GÉNÉRER MON PROGRAMME
+            <a href="#generateurs" style={{ display: "block", background: `linear-gradient(135deg, ${C}, #0891b2)`, color: "#07050f", padding: "1rem", borderRadius: 10, fontWeight: 700, fontSize: "1.1rem", textDecoration: "none", fontFamily: "'Bebas Neue',cursive", letterSpacing: "0.12em", boxShadow: `0 4px 24px ${C}44` }}>
+              🔨 CHOISIR MON GÉNÉRATEUR
             </a>
           </div>
           <p style={{ color: "#0e2535", fontSize: "0.78rem" }}>Paiement sécurisé • Téléchargement immédiat</p>
