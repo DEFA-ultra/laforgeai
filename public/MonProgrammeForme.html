@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a1a2e">
+<title>Mon Programme Forme</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --teal: #2B8A6E; --teal-l: #E4F3EE; --teal-d: #085041;
+    --blue: #185FA5; --blue-l: #EFF6FF;
+    --purple: #6D28D9; --purple-l: #F5F3FF;
+    --orange: #C05B0A; --orange-l: #FEF3C7;
+    --red: #DC2626; --red-l: #FEF2F2;
+    --gray1: #111827; --gray2: #374151; --gray3: #6B7280;
+    --gray4: #D1D5DB; --gray5: #F3F4F6; --gray6: #F9FAFB;
+    --white: #ffffff;
+    --bg: #F7F6F3;
+    --card: #ffffff;
+    --radius: 14px; --radius-sm: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--gray1);
+    min-height: 100vh;
+    max-width: 430px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: block; }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--card);
+    border-bottom: 1px solid var(--gray4);
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .top-bar h1 { font-size: 16px; font-weight: 600; flex: 1; color: var(--gray1); }
+  .back-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid var(--gray4); background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gray2); font-size: 18px; transition: background .15s;
+  }
+  .back-btn:active { background: var(--gray5); }
+
+  /* ── HOME HERO ── */
+  .home-hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+    padding: 28px 20px 24px;
+    color: white;
+  }
+  .home-hero-label { font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 6px; }
+  .home-hero-title { font-size: 24px; font-weight: 600; line-height: 1.2; margin-bottom: 4px; }
+  .home-hero-sub { font-size: 13px; color: rgba(255,255,255,.6); margin-bottom: 16px; }
+  .week-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 99px; padding: 5px 12px;
+    font-size: 12px; font-weight: 500; color: white;
+  }
+  .week-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; }
+
+  .home-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; padding: 16px;
+  }
+  .stat-card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 14px; box-shadow: var(--shadow);
+  }
+  .stat-card-lbl { font-size: 11px; color: var(--gray3); margin-bottom: 4px; }
+  .stat-card-val { font-size: 22px; font-weight: 600; color: var(--gray1); }
+
+  .section-title {
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--gray3);
+    padding: 4px 16px 8px;
+  }
+
+  /* ── SÉANCE CARDS ── */
+  .seance-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .seance-card {
+    background: var(--card); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden; cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    border: 1px solid transparent;
+  }
+  .seance-card:active { transform: scale(0.98); }
+  .seance-card-accent { height: 4px; }
+  .seance-card-body { padding: 14px 16px; }
+  .seance-card-top { display: flex; align-items: center; gap: 10px; }
+  .seance-letter {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: white; flex-shrink: 0;
+  }
+  .seance-info { flex: 1; }
+  .seance-name { font-size: 15px; font-weight: 600; color: var(--gray1); }
+  .seance-theme { font-size: 12px; color: var(--gray3); margin-top: 2px; }
+  .seance-arrow { color: var(--gray4); font-size: 20px; }
+  .seance-prog-bar { height: 3px; background: var(--gray5); border-radius: 2px; margin-top: 12px; overflow: hidden; }
+  .seance-prog-fill { height: 100%; border-radius: 2px; transition: width .4s; }
+  .seance-prog-label { font-size: 11px; color: var(--gray3); margin-top: 5px; }
+
+  /* ── TIP BOX ── */
+  .tip-box {
+    margin: 0 16px 16px; background: var(--orange-l);
+    border-radius: var(--radius-sm); padding: 12px;
+    border-left: 3px solid var(--orange);
+    font-size: 12px; color: var(--orange); line-height: 1.5;
+  }
+
+  /* ── EX SECTION ── */
+  .bloc-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px 6px;
+  }
+  .bloc-badge {
+    font-size: 11px; font-weight: 600; padding: 3px 10px;
+    border-radius: 99px; color: white;
+  }
+  .bloc-time { font-size: 11px; color: var(--gray3); margin-left: auto; }
+
+  .ex-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+  .ex-card {
+    background: var(--card); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+    border: 1.5px solid transparent; transition: border-color .2s;
+  }
+  .ex-card.done { border-color: var(--teal); }
+  .ex-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; cursor: pointer;
+  }
+  .ex-num-circle {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: white; flex-shrink: 0;
+  }
+  .ex-text { flex: 1; }
+  .ex-name { font-size: 14px; font-weight: 600; color: var(--gray1); }
+  .ex-desc { font-size: 11px; color: var(--gray3); margin-top: 2px; }
+  .muscle-chip {
+    display: inline-block; font-size: 10px; font-weight: 500;
+    padding: 2px 7px; border-radius: 99px; margin-top: 4px;
+    background: var(--red-l); color: var(--red);
+  }
+  .ex-status { font-size: 20px; }
+  .ex-status.done { color: var(--teal); }
+  .ex-status.pending { color: var(--gray4); }
+
+  .ex-body { display: none; padding: 0 14px 14px; }
+  .ex-body.open { display: block; }
+
+  .stats-mini {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px;
+  }
+  .stats-mini-item {
+    background: var(--gray6); border-radius: var(--radius-sm);
+    padding: 8px 6px; text-align: center;
+  }
+  .stats-mini-lbl { font-size: 9px; color: var(--gray3); text-transform: uppercase; letter-spacing: .04em; }
+  .stats-mini-val { font-size: 15px; font-weight: 600; color: var(--gray1); margin-top: 2px; }
+
+  .prog-tip {
+    background: var(--blue-l); border-radius: var(--radius-sm);
+    padding: 8px 10px; margin-bottom: 10px;
+    font-size: 12px; color: var(--blue); line-height: 1.5;
+    display: flex; gap: 6px;
+  }
+
+  .series-list { display: flex; flex-direction: column; gap: 6px; }
+  .serie-row {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--gray6); border-radius: var(--radius-sm);
+    padding: 9px 10px;
+  }
+  .serie-num { font-size: 12px; color: var(--gray3); width: 54px; flex-shrink: 0; }
+  .serie-reps { font-size: 13px; font-weight: 500; flex: 1; }
+  .serie-validate-btn {
+    border: 1.5px solid var(--gray4); border-radius: var(--radius-sm);
+    background: none; padding: 6px 12px; font-size: 12px; font-weight: 500;
+    cursor: pointer; color: var(--gray2); transition: all .15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .serie-validate-btn:active { transform: scale(0.96); }
+  .serie-validate-btn.validated {
+    background: var(--teal-l); border-color: var(--teal); color: var(--teal);
+  }
+
+  /* ── CIRCUIT CARD ── */
+  .circuit-section { padding: 0 16px; margin-bottom: 10px; }
+  .circuit-card {
+    background: linear-gradient(135deg, #7C2D12, #C05B0A);
+    border-radius: var(--radius); padding: 16px; color: white;
+    box-shadow: var(--shadow-md);
+  }
+  .circuit-card-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .circuit-exo-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .circuit-exo-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: rgba(255,255,255,.9);
+  }
+  .circuit-exo-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(255,255,255,.2); display: flex; align-items: center;
+    justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0;
+  }
+  .launch-btn {
+    width: 100%; padding: 12px; border: none;
+    background: rgba(255,255,255,.2); color: white;
+    border-radius: var(--radius-sm); font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    border: 1.5px solid rgba(255,255,255,.3);
+    transition: background .15s;
+  }
+  .launch-btn:active { background: rgba(255,255,255,.3); }
+
+  /* ── CARDIO ── */
+  .cardio-section { padding: 0 16px; margin-bottom: 10px; }
+  .cardio-card {
+    background: var(--blue-l); border-radius: var(--radius);
+    padding: 14px; border: 1px solid rgba(24,95,165,.15);
+  }
+  .cardio-title { font-size: 14px; font-weight: 600; color: var(--blue); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .cardio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cardio-item { background: white; border-radius: var(--radius-sm); padding: 10px; text-align: center; }
+  .cardio-item-lbl { font-size: 10px; color: var(--gray3); }
+  .cardio-item-val { font-size: 14px; font-weight: 600; color: var(--blue); margin-top: 2px; }
+
+  .bottom-sticky {
+    position: sticky; bottom: 0;
+    background: var(--card); border-top: 1px solid var(--gray4);
+    padding: 12px 16px; padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  .finish-seance-btn {
+    width: 100%; padding: 14px; border: none; border-radius: var(--radius);
+    font-size: 15px; font-weight: 600; color: white; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: opacity .15s;
+  }
+  .finish-seance-btn:active { opacity: .85; }
+
+  /* ══ CIRCUIT TIMER ══ */
+  .timer-wrapper {
+    min-height: 100vh; background: #0f0f1a;
+    display: flex; flex-direction: column;
+  }
+  .timer-top {
+    padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .timer-top h2 { font-size: 15px; font-weight: 600; color: white; flex: 1; }
+  .timer-back {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.2); background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 18px;
+  }
+
+  .timer-body { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 24px 20px; }
+
+  .tour-indicator { display: flex; gap: 8px; margin-bottom: 24px; }
+  .tour-dot-t {
+    width: 34px; height: 6px; border-radius: 3px;
+    background: rgba(255,255,255,.15); transition: background .3s;
+  }
+  .tour-dot-t.active { background: #f97316; }
+  .tour-dot-t.done { background: #4ade80; }
+
+  .phase-label {
+    font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    margin-bottom: 20px; color: rgba(255,255,255,.5);
+  }
+  .phase-label.effort { color: #fb923c; }
+  .phase-label.repos { color: #60a5fa; }
+  .phase-label.pause { color: #4ade80; }
+
+  .timer-ring-wrap {
+    position: relative; width: 200px; height: 200px; margin-bottom: 24px;
+  }
+  .timer-ring-svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: rgba(255,255,255,.08); stroke-width: 8; }
+  .ring-fg { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset .15s linear, stroke .3s; }
+  .timer-inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .timer-big { font-size: 58px; font-weight: 300; color: white; font-family: 'DM Mono', monospace; line-height: 1; }
+  .timer-unit { font-size: 13px; color: rgba(255,255,255,.4); margin-top: 4px; }
+
+  .timer-exo-name { font-size: 20px; font-weight: 600; color: white; text-align: center; margin-bottom: 6px; }
+  .timer-exo-info { font-size: 13px; color: rgba(255,255,255,.5); text-align: center; margin-bottom: 32px; }
+
+  .timer-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+  .timer-ctrl-btn {
+    padding: 14px; border-radius: var(--radius); font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif; border: none;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    transition: opacity .15s;
+  }
+  .timer-ctrl-btn:active { opacity: .8; }
+  .btn-skip { background: rgba(255,255,255,.1); color: white; }
+  .btn-pause { background: #f97316; color: white; }
+  .btn-pause.paused { background: #4ade80; color: #0f0f1a; }
+
+  /* ══ DONE SCREEN ══ */
+  .done-wrapper {
+    min-height: 100vh; background: var(--bg);
+    display: flex; flex-direction: column;
+  }
+  .done-body { flex: 1; padding: 32px 20px 24px; display: flex; flex-direction: column; align-items: center; }
+  .done-trophy {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(217,119,6,.3);
+  }
+  .done-title { font-size: 24px; font-weight: 700; color: var(--gray1); margin-bottom: 6px; }
+  .done-sub { font-size: 14px; color: var(--gray3); margin-bottom: 24px; text-align: center; }
+  .done-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 20px; }
+  .done-stat-card {
+    background: var(--card); border-radius: var(--radius); padding: 16px;
+    box-shadow: var(--shadow); text-align: center;
+  }
+  .done-stat-val { font-size: 26px; font-weight: 700; color: var(--gray1); }
+  .done-stat-lbl { font-size: 12px; color: var(--gray3); margin-top: 4px; }
+  .prog-next-box {
+    width: 100%; background: var(--blue-l); border-radius: var(--radius);
+    border: 1px solid rgba(24,95,165,.2); padding: 14px;
+    margin-bottom: 20px; font-size: 13px; color: var(--blue); line-height: 1.6;
+  }
+  .prog-next-box strong { font-weight: 600; }
+  .done-home-btn {
+    width: 100%; padding: 14px; border: none;
+    background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    color: white; border-radius: var(--radius);
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div id="home" class="screen active">
+  <div class="home-hero">
+    <div class="home-hero-label">Programme</div>
+    <div class="home-hero-title">Tonification &amp; Forme</div>
+    <div class="home-hero-sub">Full body · Machines guidées · 3×/semaine</div>
+    <div class="week-pill">
+      <div class="week-dot"></div>
+      <span id="hero-week-label">Semaine 1 sur 4</span>
+    </div>
+  </div>
+
+  <div class="home-stats">
+    <div class="stat-card">
+      <div class="stat-card-lbl">Séances validées</div>
+      <div class="stat-card-val" id="home-count">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-lbl">Semaine actuelle</div>
+      <div class="stat-card-val" id="home-week">1</div>
+    </div>
+  </div>
+
+  <div class="section-title">Mes séances</div>
+  <div class="seance-list">
+    <div class="seance-card" onclick="openSeance(0)">
+      <div class="seance-card-accent" style="background:var(--teal)"></div>
+      <div class="seance-card-body">
+        <div class="seance-card-top">
+          <div class="seance-letter" style="background:var(--teal)">A</div>
+          <div class="seance-info">
+            <div class="seance-name">Séance A</div>
+            <div class="seance-theme">Cuisses · Dos · Poitrine · Ischio</div>
+          </div>
+          <div class="seance-arrow">›</div>
+        </div>
+        <div class="seance-prog-bar"><div class="seance-prog-fill" id="fill-0" style="background:var(--teal);width:0%"></div></div>
+        <div class="seance-prog-label" id="plabel-0">0 / 4 exercices complétés</div>
+      </div>
+    </div>
+    <div class="seance-card" onclick="openSeance(1)">
+      <div class="seance-card-accent" style="background:var(--blue)"></div>
+      <div class="seance-card-body">
+        <div class="seance-card-top">
+          <div class="seance-letter" style="background:var(--blue)">B</div>
+          <div class="seance-info">
+            <div class="seance-name">Séance B</div>
+            <div class="seance-theme">Fessiers · Dos · Épaules · Cuisses</div>
+          </div>
+          <div class="seance-arrow">›</div>
+        </div>
+        <div class="seance-prog-bar"><div class="seance-prog-fill" id="fill-1" style="background:var(--blue);width:0%"></div></div>
+        <div class="seance-prog-label" id="plabel-1">0 / 4 exercices complétés</div>
+      </div>
+    </div>
+    <div class="seance-card" onclick="openSeance(2)">
+      <div class="seance-card-accent" style="background:var(--purple)"></div>
+      <div class="seance-card-body">
+        <div class="seance-card-top">
+          <div class="seance-letter" style="background:var(--purple)">C</div>
+          <div class="seance-info">
+            <div class="seance-name">Séance C</div>
+            <div class="seance-theme">Cuisses · Dos · Poitrine · Fessiers</div>
+          </div>
+          <div class="seance-arrow">›</div>
+        </div>
+        <div class="seance-prog-bar"><div class="seance-prog-fill" id="fill-2" style="background:var(--purple);width:0%"></div></div>
+        <div class="seance-prog-label" id="plabel-2">0 / 4 exercices complétés</div>
+      </div>
+    </div>
+  </div>
+  <div class="tip-box">
+    💡 <strong>Règle d'or :</strong> range la balance. Fie-toi aux photos, aux vêtements et à ta forme générale !
+  </div>
+</div>
+
+<!-- ══════════════ SÉANCE ══════════════ -->
+<div id="seance-screen" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <h1 id="seance-title">Séance A</h1>
+    <span id="week-tag" style="font-size:11px;color:var(--gray3);font-weight:600"></span>
+  </div>
+  <div id="seance-body"></div>
+  <div style="height:80px"></div>
+  <div class="bottom-sticky">
+    <button class="finish-seance-btn" id="finish-btn" onclick="finishSeance()">✓ Valider la séance</button>
+  </div>
+</div>
+
+<!-- ══════════════ CHRONO ══════════════ -->
+<div id="circuit-screen" class="screen">
+  <div class="timer-wrapper">
+    <div class="timer-top">
+      <button class="timer-back" onclick="stopTimer()">‹</button>
+      <h2>Circuit brûle-gras</h2>
+    </div>
+    <div class="timer-body">
+      <div class="tour-indicator" id="tour-indicator"></div>
+      <div class="phase-label" id="phase-label">Effort</div>
+      <div class="timer-ring-wrap">
+        <svg class="timer-ring-svg" width="200" height="200">
+          <circle class="ring-bg" cx="100" cy="100" r="90"/>
+          <circle class="ring-fg" id="ring-fg" cx="100" cy="100" r="90" stroke="#f97316"/>
+        </svg>
+        <div class="timer-inner">
+          <div class="timer-big" id="timer-num">40</div>
+          <div class="timer-unit">sec</div>
+        </div>
+      </div>
+      <div class="timer-exo-name" id="timer-exo-name">Squats dynamiques</div>
+      <div class="timer-exo-info" id="timer-exo-info">Exercice 1 / 4 — Tour 1 / 3</div>
+      <div class="timer-controls">
+        <button class="timer-ctrl-btn btn-skip" onclick="skipTimer()">⏭ Passer</button>
+        <button class="timer-ctrl-btn btn-pause" id="pause-btn" onclick="togglePause()">⏸ Pause</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ DONE ══════════════ -->
+<div id="done-screen" class="screen">
+  <div class="done-wrapper">
+    <div class="top-bar">
+      <h1>Séance terminée !</h1>
+    </div>
+    <div class="done-body">
+      <div class="done-trophy">🏆</div>
+      <div class="done-title">Bravo !</div>
+      <div class="done-sub" id="done-sub">Séance A — Semaine 1</div>
+      <div class="done-stats-grid">
+        <div class="done-stat-card"><div class="done-stat-val" id="done-exos">4</div><div class="done-stat-lbl">Exercices</div></div>
+        <div class="done-stat-card"><div class="done-stat-val" id="done-series">12</div><div class="done-stat-lbl">Séries validées</div></div>
+        <div class="done-stat-card"><div class="done-stat-val">3</div><div class="done-stat-lbl">Tours circuit</div></div>
+        <div class="done-stat-card"><div class="done-stat-val">10 min</div><div class="done-stat-lbl">Cardio final</div></div>
+      </div>
+      <div class="prog-next-box" id="prog-next-box"></div>
+      <button class="done-home-btn" onclick="goHome()">← Retour à l'accueil</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SEANCES = [
+  { id:0, name:'Séance A', letter:'A', color:'var(--teal)', colorHex:'#2B8A6E',
+    theme:'Cuisses · Dos · Poitrine · Ischio',
+    exercices:[
+      {name:'Presse à cuisses', desc:'Machine guidée · Cuisses & fessiers', muscle:'Cuisses · Fessiers', series:3, baseReps:10, rest:'1 min 30'},
+      {name:'Tirage vertical (Lat Pulldown)', desc:'Machine guidée · Dos & grand dorsal', muscle:'Dos', series:3, baseReps:10, rest:'1 min 30'},
+      {name:'Chest Press (développé assis)', desc:'Machine guidée · Poitrine & triceps', muscle:'Poitrine · Triceps', series:3, baseReps:10, rest:'1 min 30'},
+      {name:'Leg Curl couché', desc:'Machine guidée · Ischio-jambiers', muscle:'Ischio-jambiers', series:3, baseReps:12, rest:'1 min 15'},
+    ],
+    circuit:['Squats dynamiques (PDC)','Gainage planche sur les coudes','Fentes arrière alternées','Jumping Jacks'],
+  },
+  { id:1, name:'Séance B', letter:'B', color:'var(--blue)', colorHex:'#185FA5',
+    theme:'Fessiers · Dos · Épaules · Cuisses',
+    exercices:[
+      {name:'Hip Abduction machine', desc:'Machine guidée · Fessiers & abducteurs', muscle:'Fessiers', series:3, baseReps:15, rest:'1 min 15'},
+      {name:'Rowing assis (Seated Row)', desc:'Machine guidée · Dos & rhomboïdes', muscle:'Dos · Biceps', series:3, baseReps:12, rest:'1 min 30'},
+      {name:'Shoulder Press assis', desc:'Machine guidée · Deltoïdes', muscle:'Épaules', series:3, baseReps:10, rest:'1 min 30'},
+      {name:'Leg Extension', desc:'Machine guidée · Quadriceps isolation', muscle:'Quadriceps', series:3, baseReps:15, rest:'1 min'},
+    ],
+    circuit:['Hip Thrust au sol (PDC)','Gainage latéral 30s / côté','Fentes avant dynamiques','Mountain Climbers'],
+  },
+  { id:2, name:'Séance C', letter:'C', color:'var(--purple)', colorHex:'#6D28D9',
+    theme:'Cuisses · Dos · Poitrine · Fessiers',
+    exercices:[
+      {name:'Leg Press (pieds position haute)', desc:'Machine guidée · Cuisses accent fessiers', muscle:'Cuisses · Fessiers', series:3, baseReps:12, rest:'1 min 30'},
+      {name:'Tirage vertical prise serrée', desc:'Machine guidée · Dos & biceps', muscle:'Dos · Biceps', series:3, baseReps:10, rest:'1 min 30'},
+      {name:'Pec Deck (Butterfly machine)', desc:'Machine guidée · Poitrine isolation', muscle:'Poitrine', series:3, baseReps:12, rest:'1 min 30'},
+      {name:'Hip Adduction machine', desc:'Machine guidée · Adducteurs & fessiers internes', muscle:'Adducteurs', series:3, baseReps:15, rest:'1 min'},
+    ],
+    circuit:['Sumo squats (PDC)','Gainage planche mains tendues','Fentes latérales alternées','Burpees modifiés (sans saut)'],
+  }
+]
+
+const WEEK_PROG = [
+  {label:'Semaine 1', bonus:0, tip:''},
+  {label:'Semaine 2', bonus:2, tip:'+2 reps par série cette semaine. Si ça passe bien, tu es en bonne progression !'},
+  {label:'Semaine 3', bonus:4, tip:'+4 reps ou essaie d\'augmenter légèrement le poids sur les machines si les reps sont trop faciles.'},
+  {label:'Semaine 4', bonus:6, tip:'+6 reps ou augmente le poids. Fin du cycle — note les charges utilisées pour ton prochain programme !'},
+]
+
+let ST = {}
+try { ST = JSON.parse(localStorage.getItem('fit_st')||'{}') } catch(e){}
+if (!ST.week) ST.week = 1
+if (!ST.done) ST.done = []
+if (!ST.sd) ST.sd = {}
+function save() { try { localStorage.setItem('fit_st', JSON.stringify(ST)) } catch(e){} }
+
+let curSeance = null
+let liveSD = {}
+
+// ── HOME ──
+function updateHome() {
+  const w = ST.week
+  document.getElementById('hero-week-label').textContent = 'Semaine ' + w + ' sur 4'
+  document.getElementById('home-week').textContent = w
+  document.getElementById('home-count').textContent = (ST.done||[]).length
+
+  SEANCES.forEach((s,i) => {
+    const key = 's'+i+'_w'+w
+    const sd = ST.sd[key]||{}
+    const total = s.exercices.reduce((a,e)=>a+e.series,0)
+    const done = Object.values(sd).filter(Boolean).length
+    const doneEx = s.exercices.filter((_,ei)=>
+      Array.from({length:s.exercices[ei].series},(_,si)=>sd[ei+'_'+si]).every(Boolean)
+    ).length
+    const pct = total > 0 ? Math.round(done/total*100) : 0
+    document.getElementById('fill-'+i).style.width = pct+'%'
+    document.getElementById('plabel-'+i).textContent = doneEx+' / '+s.exercices.length+' exercices complétés'
+  })
+}
+
+function goHome() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  showScreen('home')
+  updateHome()
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
+  window.scrollTo(0,0)
+}
+
+// ── SÉANCE ──
+function openSeance(idx) {
+  curSeance = idx
+  const s = SEANCES[idx]
+  const w = ST.week
+  const wkey = 's'+idx+'_w'+w
+  liveSD = JSON.parse(JSON.stringify(ST.sd[wkey]||{}))
+
+  document.getElementById('seance-title').textContent = s.name
+  document.getElementById('week-tag').textContent = WEEK_PROG[w-1].label
+  document.getElementById('finish-btn').style.background = s.colorHex
+
+  let html = ''
+
+  // BLOC MUSCU
+  html += '<div class="bloc-header"><span class="bloc-badge" style="background:'+s.colorHex+'">Musculation</span><span class="bloc-time">~25-30 min</span></div>'
+  html += '<div class="ex-list">'
+  s.exercices.forEach((ex,ei) => {
+    const bonus = WEEK_PROG[w-1].bonus
+    const reps = ex.baseReps + bonus
+    const allDone = Array.from({length:ex.series},(_,si)=>liveSD[ei+'_'+si]).every(Boolean)
+    html += `<div class="ex-card${allDone?' done':''}" id="xc-${ei}">
+      <div class="ex-header" onclick="toggleExBody(${ei})">
+        <div class="ex-num-circle" style="background:${s.colorHex}">${ei+1}</div>
+        <div class="ex-text">
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-desc">${ex.desc}</div>
+          <div class="muscle-chip">${ex.muscle}</div>
+        </div>
+        <span class="ex-status${allDone?' done':' pending'}" id="xstatus-${ei}">${allDone?'✓':'○'}</span>
+      </div>
+      <div class="ex-body" id="xbody-${ei}">`
+
+    html += `<div class="stats-mini">
+      <div class="stats-mini-item"><div class="stats-mini-lbl">Séries</div><div class="stats-mini-val">${ex.series}</div></div>
+      <div class="stats-mini-item"><div class="stats-mini-lbl">Reps</div><div class="stats-mini-val" style="color:${s.colorHex}">${reps}</div></div>
+      <div class="stats-mini-item"><div class="stats-mini-lbl">Repos</div><div class="stats-mini-val" style="font-size:11px">${ex.rest}</div></div>
+    </div>`
+
+    if (bonus > 0) {
+      html += `<div class="prog-tip">📈 <span>${WEEK_PROG[w-1].tip}</span></div>`
+    }
+
+    html += '<div class="series-list">'
+    for (let si=0; si<ex.series; si++) {
+      const done = liveSD[ei+'_'+si]
+      html += `<div class="serie-row" id="srow-${ei}-${si}">
+        <span class="serie-num">Série ${si+1}</span>
+        <span class="serie-reps">${reps} reps</span>
+        <button class="serie-validate-btn${done?' validated':''}" id="sbtn-${ei}-${si}" onclick="toggleSerie(${ei},${si})">
+          ${done?'✓ Validée':'Valider'}
+        </button>
+      </div>`
+    }
+    html += '</div></div></div>'
+  })
+  html += '</div>'
+
+  // CIRCUIT
+  html += '<div class="bloc-header"><span class="bloc-badge" style="background:#C05B0A">Circuit brûle-gras</span><span class="bloc-time">~10-12 min</span></div>'
+  html += '<div class="circuit-section"><div class="circuit-card">'
+  html += '<div class="circuit-card-title">⚡ 3 tours · 40s effort / 20s repos</div>'
+  html += '<div class="circuit-exo-list">'
+  s.circuit.forEach((ex,i) => {
+    html += `<div class="circuit-exo-item"><div class="circuit-exo-num">${i+1}</div>${ex}</div>`
+  })
+  html += '</div>'
+  html += `<button class="launch-btn" onclick="startCircuit(${idx})">▶ Lancer le chrono</button>`
+  html += '</div></div>'
+
+  // CARDIO
+  html += '<div class="bloc-header"><span class="bloc-badge" style="background:var(--blue)">Finisher cardio</span><span class="bloc-time">10 min</span></div>'
+  html += '<div class="cardio-section"><div class="cardio-card">'
+  html += '<div class="cardio-title">🚶 Tapis de course incliné — Marche</div>'
+  html += '<div class="cardio-grid">'
+  html += '<div class="cardio-item"><div class="cardio-item-lbl">Vitesse</div><div class="cardio-item-val">4-5 km/h</div></div>'
+  html += '<div class="cardio-item"><div class="cardio-item-lbl">Inclinaison</div><div class="cardio-item-val">Élevée</div></div>'
+  html += '</div></div></div>'
+
+  document.getElementById('seance-body').innerHTML = html
+  showScreen('seance-screen')
+  toggleExBody(0)
+}
+
+function toggleExBody(ei) {
+  const b = document.getElementById('xbody-'+ei)
+  if(b) b.classList.toggle('open')
+}
+
+function toggleSerie(ei, si) {
+  const k = ei+'_'+si
+  liveSD[k] = !liveSD[k]
+  const btn = document.getElementById('sbtn-'+ei+'-'+si)
+  if (liveSD[k]) {
+    btn.className = 'serie-validate-btn validated'
+    btn.textContent = '✓ Validée'
+  } else {
+    btn.className = 'serie-validate-btn'
+    btn.textContent = 'Valider'
+  }
+  const s = SEANCES[curSeance]
+  const allDone = Array.from({length:s.exercices[ei].series},(_,x)=>liveSD[ei+'_'+x]).every(Boolean)
+  const card = document.getElementById('xc-'+ei)
+  const status = document.getElementById('xstatus-'+ei)
+  if (allDone) { card.classList.add('done'); status.textContent='✓'; status.className='ex-status done' }
+  else { card.classList.remove('done'); status.textContent='○'; status.className='ex-status pending' }
+
+  const wkey = 's'+curSeance+'_w'+ST.week
+  if (!ST.sd[wkey]) ST.sd[wkey] = {}
+  ST.sd[wkey][k] = liveSD[k]
+  save()
+}
+
+function finishSeance() {
+  const s = SEANCES[curSeance]
+  const w = ST.week
+  const skey = curSeance+'_w'+w
+  if (!ST.done.includes(skey)) ST.done.push(skey)
+
+  document.getElementById('done-sub').textContent = s.name + ' — ' + WEEK_PROG[w-1].label
+  document.getElementById('done-exos').textContent = s.exercices.length
+  document.getElementById('done-series').textContent = s.exercices.reduce((a,e)=>a+e.series,0)
+
+  const nbox = document.getElementById('prog-next-box')
+  const nextW = w < 4 ? w+1 : null
+  if (nextW) {
+    nbox.innerHTML = '<strong>Prochaine séance — Semaine '+nextW+' :</strong><br>' + WEEK_PROG[nextW-1].tip
+  } else {
+    nbox.innerHTML = '<strong>Cycle complet !</strong><br>Note les charges utilisées et relance un nouveau cycle en augmentant les poids de départ.'
+  }
+
+  const allDone = [0,1,2].every(i => ST.done.includes(i+'_w'+w))
+  if (allDone && w < 4) { ST.week = w+1; ST.done = []; }
+  save()
+  showScreen('done-screen')
+}
+
+// ══ CHRONO CIRCUIT ══
+const CIRC = 2*Math.PI*90
+let timerInterval = null, timerPaused = false
+let tPhase, tSecs, tExoIdx, tTour, tExos
+
+function startCircuit(idx) {
+  tExos = SEANCES[idx].circuit
+  tExoIdx = 0; tTour = 0; tPhase = 'effort'; tSecs = 40; timerPaused = false
+  updateTimerUI()
+  showScreen('circuit-screen')
+  timerInterval = setInterval(tick, 1000)
+}
+
+function stopTimer() {
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+  showScreen('seance-screen')
+}
+
+function tick() {
+  if(timerPaused) return
+  tSecs--
+  if(tSecs<=0) nextPhase()
+  else updateTimerUI()
+}
+
+function nextPhase() {
+  if(tPhase==='effort') { tPhase='repos'; tSecs=20; }
+  else if(tPhase==='repos') {
+    tExoIdx++
+    if(tExoIdx>=tExos.length) {
+      tExoIdx=0; tTour++
+      if(tTour>=3) { clearInterval(timerInterval); timerInterval=null; showScreen('seance-screen'); return; }
+      tPhase='pause'; tSecs=60
+    } else { tPhase='effort'; tSecs=40; }
+  } else { tPhase='effort'; tSecs=40; }
+  updateTimerUI()
+}
+
+function updateTimerUI() {
+  const ne = document.getElementById('timer-num')
+  const ph = document.getElementById('phase-label')
+  const rg = document.getElementById('ring-fg')
+  const en = document.getElementById('timer-exo-name')
+  const ei = document.getElementById('timer-exo-info')
+  const td = document.getElementById('tour-indicator')
+
+  let total, color, phText, phClass
+  if(tPhase==='effort'){total=40;color='#f97316';phText='Effort';phClass='effort'}
+  else if(tPhase==='repos'){total=20;color='#60a5fa';phText='Repos';phClass='repos'}
+  else{total=60;color='#4ade80';phText='Pause — reprends ton souffle';phClass='pause'}
+
+  ne.textContent = tSecs
+  ph.textContent = phText; ph.className='phase-label '+phClass
+
+  const pct = tSecs/total
+  const off = CIRC*(1-pct)
+  rg.style.strokeDasharray = CIRC
+  rg.style.strokeDashoffset = off
+  rg.style.stroke = color
+
+  en.textContent = tPhase==='pause' ? '1 min de pause — tu l\'as mérité !' : tExos[tExoIdx]
+  ei.textContent = tPhase==='pause'
+    ? 'Tour '+(tTour)+' terminé — prochain tour dans '+tSecs+'s'
+    : 'Exercice '+(tExoIdx+1)+' / '+tExos.length+' — Tour '+(tTour+1)+' / 3'
+
+  td.innerHTML = ''
+  for(let t=0;t<3;t++){
+    const d=document.createElement('div')
+    d.className='tour-dot-t'+(t<tTour?' done':t===tTour?' active':'')
+    td.appendChild(d)
+  }
+
+  const pb = document.getElementById('pause-btn')
+  pb.textContent = timerPaused ? '▶ Reprendre' : '⏸ Pause'
+  pb.className = 'timer-ctrl-btn btn-pause'+(timerPaused?' paused':'')
+}
+
+function togglePause() { timerPaused=!timerPaused; updateTimerUI() }
+function skipTimer() { nextPhase() }
+
+updateHome()
+</script>
+</body>
+</html>
